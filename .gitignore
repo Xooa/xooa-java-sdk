@@ -1,0 +1,15 @@
+/target/
+.classpath
+.project
+.settings/
+/log/
+.idea/
+*.iml
+*.iws
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+.factorypath
