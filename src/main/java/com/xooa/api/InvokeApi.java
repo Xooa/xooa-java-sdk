@@ -150,9 +150,7 @@ public class InvokeApi {
 			
 			WebCalloutResponse response = webService.makeInvokeCall(url, args);
 			
-			System.out.println("Response - " + response.getResponseCode());
-			
-			if (response.getResponseCode() == 200) {
+			if (response.getResponseCode() == 202) {
 				
 				return new Gson().fromJson(response.getResponseText(), PendingTransactionResponse.class);
 				

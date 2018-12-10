@@ -157,8 +157,7 @@ public class QueryApi {
 			
 			WebCalloutResponse response = webService.makeQueryCall(url, args);
 			
-			System.out.println("Response Code - " + response.getResponseCode());
-			if (response.getResponseCode() == 200) {
+			if (response.getResponseCode() == 202) {
 				
 				return new Gson().fromJson(response.getResponseText(), PendingTransactionResponse.class);
 				

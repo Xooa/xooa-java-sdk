@@ -158,7 +158,7 @@ public class IdentityApi {
 	 */
 	public PendingTransactionResponse regenerateIdentityApiTokenAsync(WebService webService, String calloutBaseUrl, String identityId) throws XooaApiException {
 		
-		String url = calloutBaseUrl + "/identities/" + identityId + "/regeneratetoken/?async=true";
+		String url = calloutBaseUrl + "/identities/" + identityId + "/regeneratetoken?async=true";
 		
 		return callIdentityApiAsync(webService, url, WebService.REQUEST_METHOD_POST, null);
 	}
@@ -176,24 +176,6 @@ public class IdentityApi {
 	public IdentityResponse getIdentity(WebService webService, String calloutBaseUrl, String identityId) throws XooaApiException, XooaRequestTimeoutException {
 		
 		String url = calloutBaseUrl + "/identities/" + identityId;
-		
-		return callIdentityApi(webService, url, WebService.REQUEST_METHOD_GET, null);
-	}
-	
-	/**
-	 * Call the Identity API
-	 * 
-	 * @param webService WebService object used to call the API
-	 * @param calloutBaseUrl the base url where the app is running
-	 * @param identityId Id of the identity to regenerate API Token for
-	 * @param timeout The Timeout time to wait before converting the request to async
-	 * @return IdentityResponse Gives the details about the Identity and the access priviliges
-	 * @throws XooaApiException
-	 * @throws XooaRequestTimeoutException
-	 */
-	public IdentityResponse getIdentity(WebService webService, String calloutBaseUrl, String identityId, long timeout) throws XooaApiException, XooaRequestTimeoutException {
-		
-		String url = calloutBaseUrl + "/identities/" + identityId + "/?timeout=" + timeout;
 		
 		return callIdentityApi(webService, url, WebService.REQUEST_METHOD_GET, null);
 	}
@@ -228,7 +210,7 @@ public class IdentityApi {
 	 */
 	public boolean deleteIdentity(WebService webService, String calloutBaseUrl, String identityId, long timeout) throws XooaApiException, XooaRequestTimeoutException {
 		
-		String url = calloutBaseUrl + "/identities/" + identityId + "/?timeout=" + timeout;
+		String url = calloutBaseUrl + "/identities/" + identityId + "?timeout=" + timeout;
 		
 		return deleteIdentity(webService, url, WebService.REQUEST_METHOD_DELETE, null);
 	}
@@ -244,7 +226,7 @@ public class IdentityApi {
 	 */
 	public PendingTransactionResponse deleteIdentityAsync(WebService webService, String calloutBaseUrl, String identityId) throws XooaApiException {
 		
-		String url = calloutBaseUrl + "/identities/" + identityId + "/?async=true";
+		String url = calloutBaseUrl + "/identities/" + identityId + "?async=true&timeout=3000";
 		
 		return callIdentityApiAsync(webService, url, WebService.REQUEST_METHOD_DELETE, null);
 	}
@@ -283,12 +265,15 @@ public class IdentityApi {
 						
 						List<Attributes> attributesList = new ArrayList<>();
 						
-						for (int j = 0; j < attribuesArray.length(); j++) {
+						if (attribuesArray != null) {
 							
-							// Create a new object from the attribute value
-							Attributes attributes = new Gson().fromJson(attribuesArray.optJSONObject(j).toString(), Attributes.class);
-							
-							attributesList.add(attributes);
+							for (int j = 0; j < attribuesArray.length(); j++) {
+								
+								// Create a new object from the attribute value
+								Attributes attributes = new Gson().fromJson(attribuesArray.optJSONObject(j).toString(), Attributes.class);
+								
+								attributesList.add(attributes);
+							}
 						}
 						
 						IdentityResponse identityResponse = new Gson().fromJson(String.valueOf(identitiesArray.optJSONObject(i)), IdentityResponse.class);
@@ -422,12 +407,15 @@ public class IdentityApi {
 					
 					List<Attributes> attributesList = new ArrayList<>();
 					
-					for (int i = 0; i < jsonArray.length(); i++) {
+					if (jsonArray != null) {
 						
-						// Create a new object from the attribute value
-						Attributes attributes = new Gson().fromJson(jsonArray.optString(i), Attributes.class);
-						
-						attributesList.add(attributes);
+						for (int i = 0; i < jsonArray.length(); i++) {
+							
+							// Create a new object from the attribute value
+							Attributes attributes = new Gson().fromJson(jsonArray.optString(i), Attributes.class);
+							
+							attributesList.add(attributes);
+						}
 					}
 					
 					IdentityResponse identityResponse = new Gson().fromJson(response.getResponseText(), IdentityResponse.class);
@@ -489,8 +477,9 @@ public class IdentityApi {
 		try {
 			
 			WebCalloutResponse response = webService.makeIdentityCall(url, requestMethod, requestString);
+			System.out.println(response.getResponseCode());
 			
-			if (response.getResponseCode() == 200) {
+			if (response.getResponseCode() == 202) {
 				
 				return new Gson().fromJson(response.getResponseText(), PendingTransactionResponse.class);
 				

@@ -35,7 +35,7 @@ public class sample {
 
 	public static void main(String ...args) throws InterruptedException {
 		
-		String apiToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcGlLZXkiOiJFMVpBQVNBLVBZU01WQkstS1BGM0JRUy1BMVQ1NVRFIiwiQXBpU2VjcmV0IjoibTBaNnYyMEg5SzNleFlNIiwiUGFzc3BocmFzZSI6ImI1ZmEzNDBkMTQ1NmUxMGUxMTBkZTljY2NmNjJiNjcyIiwiaWF0IjoxNTQzNTY5NTI5fQ.2eFCUoZVFeipU3xbArxWFwY8JkNmG76ZxpqB1e8hK4E";
+		String apiToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcGlLZXkiOiJFMVpBQVNBLVBZU01WQkstS1BGM0JRUy1BMVQ1NVRFIiwiQXBpU2VjcmV0IjoicXNYMTZuUkhBNVQyaWFLIiwiUGFzc3BocmFzZSI6IjAyZGJiM2U1YTlhNDg5YjYyNTYwYjY2YjdhMzcxNmE1IiwiaWF0IjoxNTQ0MDkzMTA0fQ.yqiE9SEo_fXBE3SbJ7AZ7FDOgPRSwhjkcl8aQ81ZoHY";
 		
 		XooaClient xooaClient = new XooaClient(apiToken, new IEventListener() {
 			
@@ -129,6 +129,7 @@ public class sample {
 			pendingIdentityResponse.display();
 			
 			System.out.println();
+			Thread.sleep(3000);
 			
 			System.out.println("----- Pending New Identity Details -----");
 			
@@ -160,22 +161,25 @@ public class sample {
 			
 			System.out.println("----- Get Identity Details -----");
 			
-			IdentityResponse getIdentity = xooaClient.getIdentity(newTokenIdentity.getId());
+			IdentityResponse getIdentity = xooaClient.getIdentity(newIdentity.getId());
 			getIdentity.display();
 			
 			System.out.println();
+			Thread.sleep(2000);
 			
 			System.out.println("----- Delete Identity -----");
 			
-			boolean deleteIdentity = xooaClient.deleteIdentity(newTokenIdentity.getId());
+			boolean deleteIdentity = xooaClient.deleteIdentity(newIdentity.getId());
 			System.out.println(deleteIdentity);
 			
 			System.out.println();
+			Thread.sleep(4000);
 			
 			System.out.println("----- Pending Delete Identity -----");
 			
 			PendingTransactionResponse deleteResponse = xooaClient.deleteIdentityAsync(newIdentity2.getId());
 			deleteResponse.display();
+			Thread.sleep(4000);
 			
 			System.out.println();
 			
@@ -240,10 +244,11 @@ public class sample {
 			blockResponse.display();
 			
 			System.out.println();
+			Thread.sleep(4000);
 			
 			System.out.println("----- Pending Block Response Details -----");
 			
-			xooaClient.getResultForBlockByNumber(blockResponse.getResultId()).display();;
+			xooaClient.getResultForBlockByNumber(blockResponse.getResultId()).display();
 			
 			System.out.println();
 			

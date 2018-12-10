@@ -23,9 +23,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.withSettings;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.Test;
 
 import com.xooa.WebService;
@@ -44,16 +42,15 @@ public class ResultApiTest {
 
 	
 	@Test
-	public void testGetResultForInvoke() throws JSONException {
+	public void testGetResultForInvoke() throws JSONException, XooaApiException {
 		
 		try {
 			
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("requestType", "Invoke");
-			jsonObject.put("payload", "{'payload' : {'result':[{'key':'args1','value':'12345'}],'errors':[]}}");
-	        
-	        WebCalloutResponse response = new WebCalloutResponse();
-	        response.setResponseText(jsonObject.toString());
+			String res = "{\"requestType\": \"invoke\", \"result\": {\"txId\": \"0edd83dac5049995bbc01e2132ee7d29c38fb692127357f28d60b5690439ed90\"," + 
+					"\"payload\": \"{\\\"result\\\":[{\\\"key\\\":\\\"a\\\",\\\"value\\\":\\\"c\\\"}],\\\"errors\\\":[]}\"}}";
+			
+			WebCalloutResponse response = new WebCalloutResponse();
+	        response.setResponseText(res);
 	        response.setResponseCode(200);
 	        
 	        WebService webService = mock(WebService.class);
@@ -65,13 +62,8 @@ public class ResultApiTest {
 	        
 	        InvokeResponse invoke = xooaClient.getResultForInvoke("0af1fa06-5639-440a-987f-f7ac2587c180");
 	        
-	        assertEquals(jsonObject.getString("payload"), invoke.getPayload());
+	        assertEquals("{\"result\":[{\"key\":\"a\",\"value\":\"c\"}],\"errors\":[]}", invoke.getPayload());
 	        
-		} catch (XooaApiException xae) {
-			
-			assertNotNull(xae.getErrorCode());
-			assertNotNull(xae.getErrorMessage());
-			
 		} catch (XooaRequestTimeoutException xrte) {
 			
 			assertNotNull(xrte.getResultId());
@@ -80,28 +72,14 @@ public class ResultApiTest {
 	}
 	
 	@Test
-	public void testGetResultForQuery() throws JSONException {
+	public void testGetResultForQuery() throws JSONException, XooaApiException {
 		
 		try {
 			
-			JSONObject result = new JSONObject();
-			result.put("key", "args1");
-			result.put("Value", "12345");
-			
-			JSONArray results = new JSONArray();
-			results.put(result);
-			
-			JSONArray errors = new JSONArray();
-			
-			JSONObject payload = new JSONObject();
-			payload.put("result", results);
-			payload.put("errors", errors);
-			
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("payload", payload);
+			String resp = "{\"requestType\": \"query\",\"result\":{\"payload\":{\"result\":[{\"key\": \"a\",\"value\":\"c\"}],\"errors\":[]}}}";
 			
 			WebCalloutResponse response = new WebCalloutResponse();
-	        response.setResponseText(jsonObject.toString());
+	        response.setResponseText(resp);
 	        response.setResponseCode(200);
 	        
 	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
@@ -113,13 +91,8 @@ public class ResultApiTest {
 	        
 	        QueryResponse query = xooaClient.getResultForQuery("0af1fa06-5639-440a-987f-f7ac2587c181");
 	        
-	        assertEquals(jsonObject.get("payload").toString(), query.getPayload());
+	        assertEquals("{\"payload\":{\"result\":[{\"value\":\"c\",\"key\":\"a\"}],\"errors\":[]}}", query.getPayload());
 	        
-		} catch (XooaApiException xae) {
-			
-			assertNotNull(xae.getErrorCode());
-			assertNotNull(xae.getErrorMessage());
-			
 		} catch (XooaRequestTimeoutException xrte) {
 			
 			assertNotNull(xrte.getResultId());
@@ -128,20 +101,34 @@ public class ResultApiTest {
 	}
 	
 	@Test
-	public void testGetResultForIdentity() throws JSONException {
+	public void testGetResultForIdentity() throws JSONException, XooaApiException {
 		
 		try {
 			
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("IdentityName", "Xooa");
-	        jsonObject.put("Access", "r");
-	        jsonObject.put("Id", "248691b7-2cee-4087-8306-2aa6d23ca556");
-	        jsonObject.put("AppId", "kavixooatvw2s9e27");
-	        jsonObject.put("canManageIdentities", true);
-	        jsonObject.put("createdAt", "2018-10-11T07:31:47.380Z");
+			String res = "{\n" + 
+					"  \"requestType\": \"identity\",\n" + 
+					"  \"result\": {\n" + 
+					"    \"Id\": \"74bb91b5-bb2a-493e-b2a1-bbc312fae5f4\",\n" + 
+					"    \"IdentityName\": \"string\",\n" + 
+					"    \"Access\": \"r\",\n" + 
+					"    \"Attrs\": [\n" + 
+					"      {\n" + 
+					"        \"name\": \"string\",\n" + 
+					"        \"ecert\": true,\n" + 
+					"        \"value\": \"string\"\n" + 
+					"      }\n" + 
+					"    ],\n" + 
+					"    \"canManageIdentities\": true,\n" + 
+					"    \"createdAt\": \"2018-12-10T08:25:57.570Z\",\n" + 
+					"    \"ApiToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcGlLZXkiOiJFSlhTM0RCLVFDTjRKRk0tUEFHVlFHVC0yQlhFQlg1IiwiQXBpU2VjcmV0Ijoib1h0OHN2QzlRbHZXcG1WIiwiUGFzc3BocmFzZSI6IjU2ZGNiZDE3ZmE4ZjdjYzE5MmM2OTE0N2M1YzcyNzhiIiwiaWF0IjoxNTQ0NDMwMzU3fQ.6ZTSIr6r9V6FqqM54R5cRov_4D9UBgVbkug_KZ2z_Q0\",\n" + 
+					"    \"AppId\": \"kavixooatvw2s9e27\",\n" + 
+					"    \"AppName\": \"Get-Set-Del\"\n" + 
+					"  }\n" + 
+					"}";
+			
 			
 			WebCalloutResponse response = new WebCalloutResponse();
-	        response.setResponseText(jsonObject.toString());
+	        response.setResponseText(res);
 	        response.setResponseCode(200);
 	        
 	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
@@ -153,18 +140,13 @@ public class ResultApiTest {
 	        
 	        IdentityResponse identity = xooaClient.getResultForIdentity("0af1fa06-5639-440a-987f-f7ac2587c182");
 	        
-	        assertEquals(jsonObject.getString("Xooa"), identity.getIdentityName());
-	        assertEquals(jsonObject.getString("Id"), identity.getId());
-	        assertEquals(jsonObject.getString("AppId"), identity.getAppId());
-	        assertEquals(jsonObject.getString("Access"), identity.getAccessType());
-	        assertEquals(jsonObject.getString("canManageIdentities"), identity.isCanManageIdentities());
-	        assertEquals(jsonObject.getString("createdAt"), identity.getCreatedAt());
+	        assertEquals("string", identity.getIdentityName());
+	        assertEquals("74bb91b5-bb2a-493e-b2a1-bbc312fae5f4", identity.getId());
+	        assertEquals("kavixooatvw2s9e27", identity.getAppId());
+	        assertEquals("r", identity.getAccessType());
+	        assertEquals(true, identity.isCanManageIdentities());
 	        
-		} catch (XooaApiException xae) {
-			
-			assertNotNull(xae.getErrorCode());
-			assertNotNull(xae.getErrorMessage());
-			
+	        
 		} catch (XooaRequestTimeoutException xrte) {
 			
 			assertNotNull(xrte.getResultId());
@@ -173,17 +155,20 @@ public class ResultApiTest {
 	}
 	
 	@Test
-	public void testGetResultForCurrentBlock() throws JSONException {
+	public void testGetResultForCurrentBlock() throws JSONException, XooaApiException {
 		
 		try {
-			
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("currentBlockHash", "7de96d8c-182f-4de3-83f8-955eaaa88f1a");
-	        jsonObject.put("previousBlockHash", "7de96d8c-182f-4de3-83f8-955eaaa88f1a-vsjbdbcas-ddsafz");
-	        jsonObject.put("blockNumber", "20");
+			String res = "{\n" + 
+					"  \"requestType\": \"currentBlock\",\n" + 
+					"  \"result\": {\n" + 
+					"    \"currentBlockHash\": \"f13c57b882a361b873e4e00d4accc13fa5d0223ba03b78d1f33c6ffbeb6139ac\",\n" + 
+					"    \"previousBlockHash\": \"b57c5375d01c159486aa401c144d4f64e4999600b0e561c6231d92aafb3fd9ca\",\n" + 
+					"    \"blockNumber\": 116\n" + 
+					"  }\n" + 
+					"}";
 			
 			WebCalloutResponse response = new WebCalloutResponse();
-	        response.setResponseText(jsonObject.toString());
+	        response.setResponseText(res);
 	        response.setResponseCode(200);
 	        
 	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
@@ -195,15 +180,10 @@ public class ResultApiTest {
 	        
 	        CurrentBlockResponse currentBlock = xooaClient.getResultForCurrentBlock("0af1fa06-5639-440a-987f-f7ac2587c183");
 	        
-	        assertEquals(jsonObject.getString("currentBlockHash"), currentBlock.getCurrentBlockHash());
-	        assertEquals(jsonObject.getString("previousBlockHash"), currentBlock.getPreviousBlockHash());
-	        assertEquals(jsonObject.getString("blockNumber"), currentBlock.getBlockNumber());
+	        assertEquals("f13c57b882a361b873e4e00d4accc13fa5d0223ba03b78d1f33c6ffbeb6139ac", currentBlock.getCurrentBlockHash());
+	        assertEquals("b57c5375d01c159486aa401c144d4f64e4999600b0e561c6231d92aafb3fd9ca", currentBlock.getPreviousBlockHash());
+	        assertEquals(116, currentBlock.getBlockNumber());
 	        
-		} catch (XooaApiException xae) {
-			
-			assertNotNull(xae.getErrorCode());
-			assertNotNull(xae.getErrorMessage());
-			
 		} catch (XooaRequestTimeoutException xrte) {
 			
 			assertNotNull(xrte.getResultId());
@@ -212,18 +192,22 @@ public class ResultApiTest {
 	}
 	
 	@Test
-	public void testGetResultForBlockByNumber() throws JSONException {
+	public void testGetResultForBlockByNumber() throws JSONException, XooaApiException {
 		
 		try {
 			
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("previous_hash", "7de96d8c-182f-4de3-83f8-955eaaa88f1a");
-	        jsonObject.put("data_hash", "7de96d8c-182f-4de3-83f8-955eaaa88f1a-vsjbdbcas-ddsafz");
-	        jsonObject.put("blockNumber", "20");
-	        jsonObject.put("numberOfTransactions", "4");
+			String res = "{\n" + 
+					"  \"requestType\": \"blockByNumber\",\n" + 
+					"  \"result\": {\n" + 
+					"    \"previous_hash\": \"8946410bd4a65ca7362883fc2a38024b7aaee5898ef8123fee756f4d990d7d8e\",\n" + 
+					"    \"data_hash\": \"e228d0a334ddade49d49dd6e9fbdacae9beaee10cbd85d96d1fa40826df46282\",\n" + 
+					"    \"numberOfTransactions\": 1,\n" + 
+					"    \"blockNumber\": 10\n" + 
+					"  }\n" + 
+					"}";
 			
 			WebCalloutResponse response = new WebCalloutResponse();
-	        response.setResponseText(jsonObject.toString());
+	        response.setResponseText(res);
 	        response.setResponseCode(200);
 	        
 	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
@@ -235,16 +219,11 @@ public class ResultApiTest {
 	        
 	        BlockResponse blockResponse = xooaClient.getResultForBlockByNumber("0af1fa06-5639-440a-987f-f7ac2587c184");
 	        
-	        assertEquals(jsonObject.getString("previous_hash"), blockResponse.getPreviousHash());
-	        assertEquals(jsonObject.getString("data_hash"), blockResponse.getDataHash());
-	        assertEquals(jsonObject.getString("blockNumber"), blockResponse.getBlockNumber());
-	        assertEquals(jsonObject.getString("numberOfTransactions"), blockResponse.getNumberOfTransactions());
+	        assertEquals("8946410bd4a65ca7362883fc2a38024b7aaee5898ef8123fee756f4d990d7d8e", blockResponse.getPreviousHash());
+	        assertEquals("e228d0a334ddade49d49dd6e9fbdacae9beaee10cbd85d96d1fa40826df46282", blockResponse.getDataHash());
+	        assertEquals(10, blockResponse.getBlockNumber());
+	        assertEquals(1, blockResponse.getNumberOfTransactions());
 	        
-		} catch (XooaApiException xae) {
-			
-			assertNotNull(xae.getErrorCode());
-			assertNotNull(xae.getErrorMessage());
-			
 		} catch (XooaRequestTimeoutException xrte) {
 			
 			assertNotNull(xrte.getResultId());
@@ -253,18 +232,59 @@ public class ResultApiTest {
 	}
 	
 	@Test
-	public void testGetResultForTransaction() throws JSONException {
+	public void testGetResultForTransaction() throws JSONException, XooaApiException {
 		
 		try {
-			
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("txid", "7ef699082c475383bfa68f15f1edbec06afb053f59cc0b0f118e72d3a6f3e7eb");
-	        jsonObject.put("smartcontract", "kavixooatvw2s9e27");
-	        jsonObject.put("creator_msp_id", "XooaMSP");
-	        jsonObject.put("type", "ENDORSER_TRANSACTION");
+			String res = "{\n" + 
+					"  \"requestType\": \"getByTransactionId\",\n" + 
+					"  \"result\": {\n" + 
+					"    \"txid\": \"e9703a826356d3958384bfe83e25e9b9a5f387882fcfeb754de40eb1eb53ca01\",\n" + 
+					"    \"createdt\": \"2018-12-10T08:33:14.459Z\",\n" + 
+					"    \"smartcontract\": \"kavixooatvw2s9e27\",\n" + 
+					"    \"creator_msp_id\": \"XooaMSP\",\n" + 
+					"    \"endorser_msp_id\": [\n" + 
+					"      \"XooaMSP\"\n" + 
+					"    ],\n" + 
+					"    \"type\": \"ENDORSER_TRANSACTION\",\n" + 
+					"    \"read_set\": [\n" + 
+					"      {\n" + 
+					"        \"chaincode\": \"kavixooatvw2s9e27\",\n" + 
+					"        \"set\": []\n" + 
+					"      },\n" + 
+					"      {\n" + 
+					"        \"chaincode\": \"lscc\",\n" + 
+					"        \"set\": [\n" + 
+					"          {\n" + 
+					"            \"key\": \"kavixooatvw2s9e27\",\n" + 
+					"            \"version\": {\n" + 
+					"              \"block_num\": \"66\",\n" + 
+					"              \"tx_num\": \"0\"\n" + 
+					"            }\n" + 
+					"          }\n" + 
+					"        ]\n" + 
+					"      }\n" + 
+					"    ],\n" + 
+					"    \"write_set\": [\n" + 
+					"      {\n" + 
+					"        \"chaincode\": \"kavixooatvw2s9e27\",\n" + 
+					"        \"set\": [\n" + 
+					"          {\n" + 
+					"            \"key\": \"a\",\n" + 
+					"            \"is_delete\": false,\n" + 
+					"            \"value\": \"c\"\n" + 
+					"          }\n" + 
+					"        ]\n" + 
+					"      },\n" + 
+					"      {\n" + 
+					"        \"chaincode\": \"lscc\",\n" + 
+					"        \"set\": []\n" + 
+					"      }\n" + 
+					"    ]\n" + 
+					"  }\n" + 
+					"}";
 			
 			WebCalloutResponse response = new WebCalloutResponse();
-	        response.setResponseText(jsonObject.toString());
+	        response.setResponseText(res);
 	        response.setResponseCode(200);
 	        
 	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
@@ -276,16 +296,11 @@ public class ResultApiTest {
 	        
 	        TransactionResponse transactionResponse = xooaClient.getResultForTransaction("0af1fa06-5639-440a-987f-f7ac2587c185");
 	        
-	        assertEquals(jsonObject.getString("txid"), transactionResponse.getTransactionId());
-	        assertEquals(jsonObject.getString("smartcontract"), transactionResponse.getSmartcontract());
-	        assertEquals(jsonObject.getString("creator_msp_id"), transactionResponse.getCreatorMspId());
-	        assertEquals(jsonObject.getString("type"), transactionResponse.getType());
+	        assertEquals("e9703a826356d3958384bfe83e25e9b9a5f387882fcfeb754de40eb1eb53ca01", transactionResponse.getTransactionId());
+	        assertEquals("kavixooatvw2s9e27", transactionResponse.getSmartcontract());
+	        assertEquals("XooaMSP", transactionResponse.getCreatorMspId());
+	        assertEquals("ENDORSER_TRANSACTION", transactionResponse.getType());
 	        
-		} catch (XooaApiException xae) {
-			
-			assertNotNull(xae.getErrorCode());
-			assertNotNull(xae.getErrorMessage());
-			
 		} catch (XooaRequestTimeoutException xrte) {
 			
 			assertNotNull(xrte.getResultId());

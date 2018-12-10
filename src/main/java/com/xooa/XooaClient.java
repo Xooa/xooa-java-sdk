@@ -474,21 +474,6 @@ public class XooaClient {
     }
     
     /**
-     * Get the specified identity from the identity registry
-     * Required permission: manage identities (canManageIdentities=true)
-     * 
-     * @param identityId Id of the identity to regenerate API Token for
-     * @param timeout The Timeout time to wait before converting the request to async
-     * @return IdentityResponse Gives the details about the Identity and the access priviliges
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
-     */
-    public IdentityResponse getIdentity(String identityId, long timeout) throws XooaApiException, XooaRequestTimeoutException {
-    	
-    	return new IdentityApi().getIdentity(webService, appUrl, identityId, timeout);
-    }
-    
-    /**
      * Deletes an identity.
      * Required permission: manage identities (canManageIdentities=true)
      * 

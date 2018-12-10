@@ -38,7 +38,7 @@ public class InvokeApiTest {
 	
 	
 	@Test
-	public void testInvoke() throws JSONException {
+	public void testInvoke() throws JSONException, XooaApiException {
 		
 		try {
 			
@@ -64,11 +64,6 @@ public class InvokeApiTest {
 	        assertEquals(jsonObject.getString("txId"), invoke.getTransactionId());
 	        assertEquals(jsonObject.getString("payload"), invoke.getPayload());
 	        
-		} catch (XooaApiException xae) {
-			
-			assertNotNull(xae.getErrorCode());
-			assertNotNull(xae.getErrorMessage());
-			
 		} catch (XooaRequestTimeoutException xrte) {
 			
 			assertNotNull(xrte.getResultId());
@@ -78,36 +73,29 @@ public class InvokeApiTest {
 	
 	
 	@Test
-	public void testInvokeAsync() throws JSONException {
+	public void testInvokeAsync() throws JSONException, XooaApiException {
 		
-		try {
-			
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("resultURL", "/kavixooatvw2s9e27/results/b5d14976-050c-4b0a-bd49-6be0da258176");
-	        jsonObject.put("resultId", "b5d14976-050c-4b0a-bd49-6be0da258176");
-	        
-	        WebCalloutResponse response = new WebCalloutResponse();
-	        response.setResponseText(jsonObject.toString());
-	        response.setResponseCode(200);
-	        
-	        String[] args = {"args1", "190"};
-	        
-	        WebService webService = mock(WebService.class);
-	        
-	        when(webService.makeInvokeCall("https://api.xooa.com/api/v1/invoke/set/?async=true", args)).thenReturn(response);
-	        
-	        XooaClient xooaClient = new XooaClient();
-	        xooaClient.setWebService(webService);
-	        
-	        PendingTransactionResponse identity = xooaClient.invokeAsync("set", args);
-	        
-	        assertNotNull(identity.getResultId());
-			assertNotNull(identity.getResultUrl());
-	        
-		} catch (XooaApiException xae) {
-			
-			assertNotNull(xae.getErrorCode());
-			//assertNotNull(xae.getErrorMessage());
-		}
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("resultURL", "/kavixooatvw2s9e27/results/b5d14976-050c-4b0a-bd49-6be0da258176");
+		jsonObject.put("resultId", "b5d14976-050c-4b0a-bd49-6be0da258176");
+		
+		WebCalloutResponse response = new WebCalloutResponse();
+		response.setResponseText(jsonObject.toString());
+		response.setResponseCode(200);
+		
+		String[] args = {"args1", "190"};
+		
+		WebService webService = mock(WebService.class);
+		
+		when(webService.makeInvokeCall("https://api.xooa.com/api/v1/invoke/set?async=true", args)).thenReturn(response);
+		
+		XooaClient xooaClient = new XooaClient();
+		xooaClient.setWebService(webService);
+		
+		PendingTransactionResponse identity = xooaClient.invokeAsync("set", args);
+		
+		assertNotNull(identity.getResultId());
+		assertNotNull(identity.getResultUrl());
+		
 	}
 }

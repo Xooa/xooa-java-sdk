@@ -120,7 +120,7 @@ public class BlockchainApi {
 	 */
 	public PendingTransactionResponse getTransactionAsync(WebService webService, String calloutBaseUrl, String transactionId) throws XooaApiException {
 		
-		String url = calloutBaseUrl + "/transactions/" + transactionId + "/?async=true";
+		String url = calloutBaseUrl + "/transactions/" + transactionId + "?async=true";
 		
 		return callBlockchainApiAsync(webService, url, WebService.REQUEST_METHOD_GET);
 	}
@@ -293,7 +293,7 @@ public class BlockchainApi {
 			
 			WebCalloutResponse response = webService.makeBlockchainCall(url, requestMethod);
 			
-			if (response.getResponseCode() == 200) {
+			if (response.getResponseCode() == 202) {
 				
 				return new Gson().fromJson(response.getResponseText(), PendingTransactionResponse.class);
 				

@@ -1,0 +1,7 @@
+Apps:
+  Xooa-Microsoft:
+    Name: Xooa Java SDK Sample Smart Contract
+    Description: Xooa-Java SDK Smart Contract is a get-set-del smart contract that can be used to insert, fetch and delete data in Xooa Ledger.
+    path: /examples/chaincode/
+    language: go
+    README: https://github.com/Xooa/xooa-java-sdk/blob/master/examples/chaincode/Readme.md

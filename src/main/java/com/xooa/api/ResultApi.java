@@ -69,10 +69,16 @@ public class ResultApi {
 					
 					JSONObject responseJson = new JSONObject(response.getResponseText());
 					
-					String payload = responseJson.get("payload").toString();
+					String result = responseJson.get("result").toString();
+					
+					JSONObject resultJSON = new JSONObject(result);
+					
+					String txnId = resultJSON.getString("txId");
+					String payload = resultJSON.getString("payload");
 					
 					InvokeResponse invokeResponse = new InvokeResponse();
 					invokeResponse.setPayload(payload);
+					invokeResponse.setTransactionId(txnId);
 					return invokeResponse;
 					
 				} catch (Exception e) {
@@ -139,7 +145,7 @@ public class ResultApi {
 					
 					JSONObject responseJson = new JSONObject(response.getResponseText());
 					
-					String payload = responseJson.get("payload").toString();
+					String payload = responseJson.get("result").toString();
 					
 					QueryResponse queryResponse =  new QueryResponse();
 					queryResponse.setPayload(payload);
@@ -212,7 +218,7 @@ public class ResultApi {
 					
 					JSONObject responseJson = new JSONObject(response.getResponseText());
 					
-					JSONObject payload = (JSONObject) responseJson.get("payload");
+					JSONObject payload = (JSONObject) responseJson.get("result");
 					
 					JSONArray attributesArray = payload.optJSONArray("Attrs");
 					
@@ -299,7 +305,7 @@ public class ResultApi {
 					
 					JSONObject responseJson = new JSONObject(response.getResponseText());
 					
-					String payload = responseJson.get("payload").toString();
+					String payload = responseJson.get("result").toString();
 					
 					currentBlockResponse = new Gson().fromJson(payload, CurrentBlockResponse.class);
 					
@@ -370,7 +376,7 @@ public class ResultApi {
 					
 					JSONObject responseJson = new JSONObject(response.getResponseText());
 					
-					String payload = responseJson.get("payload").toString();
+					String payload = responseJson.get("result").toString();
 					
 					return new Gson().fromJson(payload, BlockResponse.class);
 					
@@ -438,7 +444,7 @@ public class ResultApi {
 					
 					JSONObject responseJson = new JSONObject(response.getResponseText());
 					
-					String payload = responseJson.get("payload").toString();
+					String payload = responseJson.get("result").toString();
 					
 					return new Gson().fromJson(payload, TransactionResponse.class);
 					
@@ -506,7 +512,7 @@ public class ResultApi {
 					
 					JSONObject responseJson = new JSONObject(response.getResponseText());
 					
-					JSONObject payload = (JSONObject) responseJson.get("payload");
+					JSONObject payload = (JSONObject) responseJson.get("result");
 					
 					return payload.getBoolean("deleted");
 					

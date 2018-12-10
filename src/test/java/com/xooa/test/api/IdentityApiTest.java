@@ -42,7 +42,7 @@ import com.xooa.response.WebCalloutResponse;
 public class IdentityApiTest {
 	
 	@Test
-	public void testGetCurrentIdentity() throws JSONException {
+	public void testGetCurrentIdentity() throws JSONException, XooaApiException {
 		
 		try {
 			
@@ -67,19 +67,13 @@ public class IdentityApiTest {
 	        
 	        IdentityResponse identity = xooaClient.getCurrentIdentity();
 	        
-	        assertEquals(jsonObject.getString("Xooa"), identity.getIdentityName());
+	        assertEquals(jsonObject.getString("IdentityName"), identity.getIdentityName());
 	        assertEquals(jsonObject.getString("Id"), identity.getId());
 	        assertEquals(jsonObject.getString("AppId"), identity.getAppId());
 	        assertEquals(jsonObject.getString("Access"), identity.getAccessType());
-	        assertEquals(jsonObject.getString("canManageIdentities"), identity.isCanManageIdentities());
+	        assertEquals(jsonObject.getBoolean("canManageIdentities"), identity.isCanManageIdentities());
 	        assertEquals(jsonObject.getString("createdAt"), identity.getCreatedAt());
 	        
-		} catch (XooaApiException xae) {
-			
-			xae.printStackTrace();
-			assertNotNull(xae.getErrorCode());
-			//assertNotNull(xae.getErrorMessage());
-			
 		} catch (XooaRequestTimeoutException xrte) {
 			
 			assertNotNull(xrte.getResultId());
@@ -88,7 +82,7 @@ public class IdentityApiTest {
 	}
 	
 	@Test
-	public void testEnrollIdentity() throws JSONException {
+	public void testEnrollIdentity() throws JSONException, XooaApiException {
 		
 		try {
 			
@@ -114,27 +108,21 @@ public class IdentityApiTest {
 	        
 	        WebService webService = mock(WebService.class);
 	        
-	        when(webService.makeIdentityCall("https://api.xooa.com/api/v1/identities", "GET", requestString)).thenReturn(response);
+	        when(webService.makeIdentityCall("https://api.xooa.com/api/v1/identities", "POST", requestString)).thenReturn(response);
 	        
 	        XooaClient xooaClient = new XooaClient();
 	        xooaClient.setWebService(webService);
 	        
 	        IdentityResponse identity = xooaClient.enrollIdentity(request);
 	        
-	        assertEquals(jsonObject.getString("Xooa"), identity.getIdentityName());
+	        assertEquals(jsonObject.getString("IdentityName"), identity.getIdentityName());
 	        assertEquals(jsonObject.getString("Id"), identity.getId());
 	        assertEquals(jsonObject.getString("AppId"), identity.getAppId());
 	        assertEquals(jsonObject.getString("Access"), identity.getAccessType());
-	        assertEquals(jsonObject.getString("canManageIdentities"), identity.isCanManageIdentities());
+	        assertEquals(jsonObject.getBoolean("canManageIdentities"), identity.isCanManageIdentities());
 	        assertEquals(jsonObject.getString("createdAt"), identity.getCreatedAt());
 	        assertEquals(jsonObject.getString("ApiToken"), identity.getApiToken());
 	        
-		} catch (XooaApiException xae) {
-			
-			xae.printStackTrace();
-			assertNotNull(xae.getErrorCode());
-			//assertNotNull(xae.getErrorMessage());
-			
 		} catch (XooaRequestTimeoutException xrte) {
 			
 			assertNotNull(xrte.getResultId());
@@ -144,48 +132,40 @@ public class IdentityApiTest {
 	
 	
 	@Test
-	public void testEnrollIdentityAsync() throws JSONException {
+	public void testEnrollIdentityAsync() throws JSONException, XooaApiException {
 		
-		try {
-			
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("resultURL", "/kavixooatvw2s9e27/results/b5d14976-050c-4b0a-bd49-6be0da258176");
-	        jsonObject.put("resultId", "b5d14976-050c-4b0a-bd49-6be0da258176");
-	        
-	        WebCalloutResponse response = new WebCalloutResponse();
-	        response.setResponseText(jsonObject.toString());
-	        response.setResponseCode(200);
-	        
-	        IdentityRequest request = new IdentityRequest();
-	        request.setIdentityName("Xooa");
-	        request.setAccessType("r");
-	        request.setCanManageIdentities(true);
-	        
-	        String requestString = new Gson().toJson(request);
-	        
-	        WebService webService = mock(WebService.class);
-	        
-	        when(webService.makeIdentityCall("https://api.xooa.com/api/v1/identities/?async=true", "GET", requestString)).thenReturn(response);
-	        
-	        XooaClient xooaClient = new XooaClient();
-	        xooaClient.setWebService(webService);
-	        
-	        PendingTransactionResponse identity = xooaClient.enrollIdentityAsync(request);
-	        
-	        assertNotNull(identity.getResultId());
-			assertNotNull(identity.getResultUrl());
-	        
-		} catch (XooaApiException xae) {
-			
-			xae.printStackTrace();
-			assertNotNull(xae.getErrorCode());
-			//assertNotNull(xae.getErrorMessage());
-		}
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("resultURL", "/kavixooatvw2s9e27/results/b5d14976-050c-4b0a-bd49-6be0da258176");
+		jsonObject.put("resultId", "b5d14976-050c-4b0a-bd49-6be0da258176");
+		
+		WebCalloutResponse response = new WebCalloutResponse();
+		response.setResponseText(jsonObject.toString());
+		response.setResponseCode(200);
+		
+		IdentityRequest request = new IdentityRequest();
+		request.setIdentityName("Xooa");
+		request.setAccessType("r");
+		request.setCanManageIdentities(true);
+		
+		String requestString = new Gson().toJson(request);
+		
+		WebService webService = mock(WebService.class);
+		
+		when(webService.makeIdentityCall("https://api.xooa.com/api/v1/identities/?async=true", "POST", requestString)).thenReturn(response);
+		
+		XooaClient xooaClient = new XooaClient();
+		xooaClient.setWebService(webService);
+		
+		PendingTransactionResponse identity = xooaClient.enrollIdentityAsync(request);
+		
+		assertNotNull(identity.getResultId());
+		assertNotNull(identity.getResultUrl());
+		
 	}
 	
 	
 	@Test
-	public void testRegenerateIdentityApiToken() throws JSONException {
+	public void testRegenerateIdentityApiToken() throws JSONException, XooaApiException {
 		
 		try {
 			
@@ -204,27 +184,21 @@ public class IdentityApiTest {
 	        
 	        WebService webService = mock(WebService.class);
 	        
-	        when(webService.makeIdentityCall("https://api.xooa.com/api/v1/identities/248691b7-2cee-4087-8306-2aa6d23ca556/regeneratetoken", "GET", null)).thenReturn(response);
+	        when(webService.makeIdentityCall("https://api.xooa.com/api/v1/identities/248691b7-2cee-4087-8306-2aa6d23ca556/regeneratetoken", "POST", null)).thenReturn(response);
 	        
 	        XooaClient xooaClient = new XooaClient();
 	        xooaClient.setWebService(webService);
 	        
 	        IdentityResponse identity = xooaClient.regenerateIdentityApiToken("248691b7-2cee-4087-8306-2aa6d23ca556");
 	        
-	        assertEquals(jsonObject.getString("Xooa"), identity.getIdentityName());
+	        assertEquals(jsonObject.getString("IdentityName"), identity.getIdentityName());
 	        assertEquals(jsonObject.getString("Id"), identity.getId());
 	        assertEquals(jsonObject.getString("AppId"), identity.getAppId());
 	        assertEquals(jsonObject.getString("Access"), identity.getAccessType());
-	        assertEquals(jsonObject.getString("canManageIdentities"), identity.isCanManageIdentities());
+	        assertEquals(jsonObject.getBoolean("canManageIdentities"), identity.isCanManageIdentities());
 	        assertEquals(jsonObject.getString("createdAt"), identity.getCreatedAt());
 	        assertEquals(jsonObject.getString("ApiToken"), identity.getApiToken());
 	        
-		} catch (XooaApiException xae) {
-			
-			xae.printStackTrace();
-			assertNotNull(xae.getErrorCode());
-			//assertNotNull(xae.getErrorMessage());
-			
 		} catch (XooaRequestTimeoutException xrte) {
 			
 			assertNotNull(xrte.getResultId());
@@ -234,40 +208,32 @@ public class IdentityApiTest {
 	
 	
 	@Test
-	public void testRegenerateIdentityApiTokenAsync() throws JSONException {
+	public void testRegenerateIdentityApiTokenAsync() throws JSONException, XooaApiException {
 		
-		try {
-			
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("resultURL", "/kavixooatvw2s9e27/results/b5d14976-050c-4b0a-bd49-6be0da258176");
-	        jsonObject.put("resultId", "b5d14976-050c-4b0a-bd49-6be0da258176");
-	        
-	        WebCalloutResponse response = new WebCalloutResponse();
-	        response.setResponseText(jsonObject.toString());
-	        response.setResponseCode(200);
-	        
-	        WebService webService = mock(WebService.class);
-	        
-	        when(webService.makeIdentityCall("https://api.xooa.com/api/v1/identities/248691b7-2cee-4087-8306-2aa6d23ca556/regeneratetoken/?async=true", "GET", null)).thenReturn(response);
-	        
-	        XooaClient xooaClient = new XooaClient();
-	        xooaClient.setWebService(webService);
-	        
-	        PendingTransactionResponse identity = xooaClient.regenerateIdentityApiTokenAsync("248691b7-2cee-4087-8306-2aa6d23ca556");
-	        
-	        assertNotNull(identity.getResultId());
-			assertNotNull(identity.getResultUrl());
-	        
-		} catch (XooaApiException xae) {
-			
-			xae.printStackTrace();
-			assertNotNull(xae.getErrorCode());
-			//assertNotNull(xae.getErrorMessage());
-		}
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("resultURL", "/kavixooatvw2s9e27/results/b5d14976-050c-4b0a-bd49-6be0da258176");
+		jsonObject.put("resultId", "b5d14976-050c-4b0a-bd49-6be0da258176");
+		
+		WebCalloutResponse response = new WebCalloutResponse();
+		response.setResponseText(jsonObject.toString());
+		response.setResponseCode(200);
+		
+		WebService webService = mock(WebService.class);
+		
+		when(webService.makeIdentityCall("https://api.xooa.com/api/v1/identities/248691b7-2cee-4087-8306-2aa6d23ca556/regeneratetoken?async=true", "POST", null)).thenReturn(response);
+		
+		XooaClient xooaClient = new XooaClient();
+		xooaClient.setWebService(webService);
+		
+		PendingTransactionResponse identity = xooaClient.regenerateIdentityApiTokenAsync("248691b7-2cee-4087-8306-2aa6d23ca556");
+		
+		assertNotNull(identity.getResultId());
+		assertNotNull(identity.getResultUrl());
+		
 	}
 	
 	@Test
-	public void testGetIdentity() throws JSONException {
+	public void testGetIdentity() throws JSONException, XooaApiException {
 		
 		try {
 			
@@ -292,19 +258,13 @@ public class IdentityApiTest {
 	        
 	        IdentityResponse identity = xooaClient.getIdentity("248691b7-2cee-4087-8306-2aa6d23ca556");
 	        
-	        assertEquals(jsonObject.getString("Xooa"), identity.getIdentityName());
+	        assertEquals(jsonObject.getString("IdentityName"), identity.getIdentityName());
 	        assertEquals(jsonObject.getString("Id"), identity.getId());
 	        assertEquals(jsonObject.getString("AppId"), identity.getAppId());
 	        assertEquals(jsonObject.getString("Access"), identity.getAccessType());
-	        assertEquals(jsonObject.getString("canManageIdentities"), identity.isCanManageIdentities());
+	        assertEquals(jsonObject.getBoolean("canManageIdentities"), identity.isCanManageIdentities());
 	        assertEquals(jsonObject.getString("createdAt"), identity.getCreatedAt());
 	        
-		} catch (XooaApiException xae) {
-			
-			xae.printStackTrace();
-			assertNotNull(xae.getErrorCode());
-			//assertNotNull(xae.getErrorMessage());
-			
 		} catch (XooaRequestTimeoutException xrte) {
 			
 			assertNotNull(xrte.getResultId());
@@ -314,7 +274,7 @@ public class IdentityApiTest {
 	
 	
 	@Test
-	public void testGetIdentities() throws JSONException {
+	public void testGetIdentities() throws JSONException, XooaApiException {
 		
 		try {
 			
@@ -343,19 +303,13 @@ public class IdentityApiTest {
 	        List<IdentityResponse> identities = xooaClient.getIdentities();
 	        IdentityResponse identity = identities.get(0);
 	        
-	        assertEquals(jsonObject.getString("Xooa"), identity.getIdentityName());
+	        assertEquals(jsonObject.getString("IdentityName"), identity.getIdentityName());
 	        assertEquals(jsonObject.getString("Id"), identity.getId());
 	        assertEquals(jsonObject.getString("AppId"), identity.getAppId());
 	        assertEquals(jsonObject.getString("Access"), identity.getAccessType());
-	        assertEquals(jsonObject.getString("canManageIdentities"), identity.isCanManageIdentities());
+	        assertEquals(jsonObject.getBoolean("canManageIdentities"), identity.isCanManageIdentities());
 	        assertEquals(identity.getCreatedAt(), jsonObject.getString("createdAt"));
 	        
-		} catch (XooaApiException xae) {
-			
-			xae.printStackTrace();
-			assertNotNull(xae.getErrorCode());
-			//assertNotNull(xae.getErrorMessage());
-			
 		} catch (XooaRequestTimeoutException xrte) {
 			
 			assertNotNull(xrte.getResultId());
@@ -365,7 +319,7 @@ public class IdentityApiTest {
 	
 	
 	@Test
-	public void testDeleteIdentity() throws JSONException {
+	public void testDeleteIdentity() throws JSONException, XooaApiException {
 		
 		try {
 			
@@ -387,12 +341,6 @@ public class IdentityApiTest {
 	        
 	        assertEquals(jsonObject.getBoolean("deleted"), identity);
 	        
-		} catch (XooaApiException xae) {
-			
-			xae.printStackTrace();
-			assertNotNull(xae.getErrorCode());
-			//assertNotNull(xae.getErrorMessage());
-			
 		} catch (XooaRequestTimeoutException xrte) {
 			
 			assertNotNull(xrte.getResultId());
@@ -402,35 +350,27 @@ public class IdentityApiTest {
 	
 	
 	@Test
-	public void testDeleteIdentityAsync() throws JSONException {
+	public void testDeleteIdentityAsync() throws JSONException, XooaApiException {
 		
-		try {
-			
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("resultURL", "/kavixooatvw2s9e27/results/b5d14976-050c-4b0a-bd49-6be0da258176");
-	        jsonObject.put("resultId", "b5d14976-050c-4b0a-bd49-6be0da258176");
-	        
-	        WebCalloutResponse response = new WebCalloutResponse();
-	        response.setResponseText(jsonObject.toString());
-	        response.setResponseCode(200);
-	        
-	        WebService webService = mock(WebService.class);
-	        
-	        when(webService.makeIdentityCall("https://api.xooa.com/api/v1/identities/248691b7-2cee-4087-8306-2aa6d23ca556/?async=true", "DELETE", null)).thenReturn(response);
-	        
-	        XooaClient xooaClient = new XooaClient();
-	        xooaClient.setWebService(webService);
-	        
-	        PendingTransactionResponse identity = xooaClient.deleteIdentityAsync("248691b7-2cee-4087-8306-2aa6d23ca556");
-	        
-	        assertNotNull(identity.getResultId());
-			assertNotNull(identity.getResultUrl());
-	        
-		} catch (XooaApiException xae) {
-			
-			xae.printStackTrace();
-			assertNotNull(xae.getErrorCode());
-			//assertNotNull(xae.getErrorMessage());
-		}
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("resultURL", "/kavixooatvw2s9e27/results/b5d14976-050c-4b0a-bd49-6be0da258176");
+		jsonObject.put("resultId", "b5d14976-050c-4b0a-bd49-6be0da258176");
+		
+		WebCalloutResponse response = new WebCalloutResponse();
+		response.setResponseText(jsonObject.toString());
+		response.setResponseCode(200);
+		
+		WebService webService = mock(WebService.class);
+		
+		when(webService.makeIdentityCall("https://api.xooa.com/api/v1/identities/248691b7-2cee-4087-8306-2aa6d23ca556/?async=true", "DELETE", null)).thenReturn(response);
+		
+		XooaClient xooaClient = new XooaClient();
+		xooaClient.setWebService(webService);
+		
+		PendingTransactionResponse identity = xooaClient.deleteIdentityAsync("248691b7-2cee-4087-8306-2aa6d23ca556");
+		
+		assertNotNull(identity.getResultId());
+		assertNotNull(identity.getResultUrl());
+	
 	}
 }
