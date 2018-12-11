@@ -84,7 +84,7 @@ public class BlockchainApiTest {
 	    
 	    WebCalloutResponse response = new WebCalloutResponse();
 	    response.setResponseText(jsonObject.toString());
-	    response.setResponseCode(200);
+	    response.setResponseCode(202);
 	    
 	    WebService webService = mock(WebService.class);
 	    
@@ -147,7 +147,7 @@ public class BlockchainApiTest {
 		
 		WebCalloutResponse response = new WebCalloutResponse();
 		response.setResponseText(jsonObject.toString());
-		response.setResponseCode(200);
+		response.setResponseCode(202);
 		
 		WebService webService = mock(WebService.class);
 		
@@ -209,7 +209,7 @@ public class BlockchainApiTest {
 	    
 	    WebCalloutResponse response = new WebCalloutResponse();
 	    response.setResponseText(jsonObject.toString());
-	    response.setResponseCode(200);
+	    response.setResponseCode(202);
 	    
 	    WebService webService = mock(WebService.class);
 	    

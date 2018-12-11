@@ -81,7 +81,7 @@ public class InvokeApiTest {
 		
 		WebCalloutResponse response = new WebCalloutResponse();
 		response.setResponseText(jsonObject.toString());
-		response.setResponseCode(200);
+		response.setResponseCode(202);
 		
 		String[] args = {"args1", "190"};
 		

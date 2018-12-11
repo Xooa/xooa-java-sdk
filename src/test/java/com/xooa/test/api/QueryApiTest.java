@@ -59,8 +59,6 @@ public class QueryApiTest {
 	        
 	        QueryResponse query = xooaClient.query("get", args);
 	        
-	        System.out.println(query.getPayload());
-	        
 	        assertEquals("{\"result\":[{\"value\":\"c\",\"key\":\"a\"}],\"errors\":[]}", query.getPayload());
 	        
 		} catch (XooaRequestTimeoutException xrte) {
@@ -80,7 +78,7 @@ public class QueryApiTest {
 		
 		WebCalloutResponse response = new WebCalloutResponse();
 		response.setResponseText(jsonObject.toString());
-		response.setResponseCode(200);
+		response.setResponseCode(202);
 		
 		String[] args = {"args1"};
 		

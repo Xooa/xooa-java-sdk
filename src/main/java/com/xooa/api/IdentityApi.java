@@ -226,7 +226,7 @@ public class IdentityApi {
 	 */
 	public PendingTransactionResponse deleteIdentityAsync(WebService webService, String calloutBaseUrl, String identityId) throws XooaApiException {
 		
-		String url = calloutBaseUrl + "/identities/" + identityId + "?async=true&timeout=3000";
+		String url = calloutBaseUrl + "/identities/" + identityId + "?async=true";
 		
 		return callIdentityApiAsync(webService, url, WebService.REQUEST_METHOD_DELETE, null);
 	}
@@ -477,7 +477,7 @@ public class IdentityApi {
 		try {
 			
 			WebCalloutResponse response = webService.makeIdentityCall(url, requestMethod, requestString);
-			System.out.println(response.getResponseCode());
+			
 			
 			if (response.getResponseCode() == 202) {
 				

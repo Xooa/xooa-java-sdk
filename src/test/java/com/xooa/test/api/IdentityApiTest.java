@@ -140,7 +140,7 @@ public class IdentityApiTest {
 		
 		WebCalloutResponse response = new WebCalloutResponse();
 		response.setResponseText(jsonObject.toString());
-		response.setResponseCode(200);
+		response.setResponseCode(202);
 		
 		IdentityRequest request = new IdentityRequest();
 		request.setIdentityName("Xooa");
@@ -216,7 +216,7 @@ public class IdentityApiTest {
 		
 		WebCalloutResponse response = new WebCalloutResponse();
 		response.setResponseText(jsonObject.toString());
-		response.setResponseCode(200);
+		response.setResponseCode(202);
 		
 		WebService webService = mock(WebService.class);
 		
@@ -358,11 +358,11 @@ public class IdentityApiTest {
 		
 		WebCalloutResponse response = new WebCalloutResponse();
 		response.setResponseText(jsonObject.toString());
-		response.setResponseCode(200);
+		response.setResponseCode(202);
 		
 		WebService webService = mock(WebService.class);
 		
-		when(webService.makeIdentityCall("https://api.xooa.com/api/v1/identities/248691b7-2cee-4087-8306-2aa6d23ca556/?async=true", "DELETE", null)).thenReturn(response);
+		when(webService.makeIdentityCall("https://api.xooa.com/api/v1/identities/248691b7-2cee-4087-8306-2aa6d23ca556?async=true", "DELETE", null)).thenReturn(response);
 		
 		XooaClient xooaClient = new XooaClient();
 		xooaClient.setWebService(webService);

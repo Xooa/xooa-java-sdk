@@ -77,17 +77,9 @@ public class XooaClientTest {
         XooaClient xooaClient = new XooaClient();
         xooaClient.setWebService(webService);
         
-        try {
+        boolean result = xooaClient.isValid();
         	
-        	boolean result = xooaClient.isValid();
-        	
-        	assertTrue(result);
-        	
-        } catch (XooaApiException e) {
-        	
-        	e.printStackTrace();
-        	
-        }
+        assertTrue(result);
     }
 	
 	@Test
@@ -108,17 +100,10 @@ public class XooaClientTest {
         XooaClient xooaClient = new XooaClient();
         xooaClient.setWebService(webService);
         
-        try {
-        	
-        	boolean result = xooaClient.isValid();
-        	
-        	assertFalse(result);
-        	
-        } catch (XooaApiException e) {
-        	
-        	e.printStackTrace();
-        	
-        }
+        boolean result = xooaClient.isValid();
+        
+        assertFalse(result);
+        
     }
 	
 	@Test
