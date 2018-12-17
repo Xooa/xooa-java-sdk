@@ -52,8 +52,8 @@ public class ResultApi {
 	 * @param calloutBaseUrl the base url where the app is running
 	 * @param resultId result id from a previous blockchain transaction
 	 * @return InvokeResponse Gives the Transaction Id and payload from Xooa
-	 * @throws XooaApiException
-	 * @throws XooaRequestTimeoutException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
 	public InvokeResponse getResultForInvoke(WebService webService, String calloutBaseUrl, String resultId) throws XooaApiException, XooaRequestTimeoutException {
 		
@@ -128,8 +128,8 @@ public class ResultApi {
 	 * @param calloutBaseUrl the base url where the app is running
 	 * @param resultId result id from a previous blockchain transaction
 	 * @return QueryResponse Gives the payload received from the smart contract
-	 * @throws XooaApiException
-	 * @throws XooaRequestTimeoutException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
 	public QueryResponse getResultForQuery(WebService webService, String calloutBaseUrl, String resultId) throws XooaApiException, XooaRequestTimeoutException {
 		
@@ -199,8 +199,8 @@ public class ResultApi {
 	 * @param calloutBaseUrl the base url where the app is running
 	 * @param resultId result id from a previous blockchain transaction
 	 * @return IdentityResponse Gives the details about the Identity and the access priviliges
-	 * @throws XooaApiException
-	 * @throws XooaRequestTimeoutException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
 	public IdentityResponse getResultForIdentity(WebService webService, String calloutBaseUrl, String resultId) throws XooaApiException, XooaRequestTimeoutException {
 		
@@ -286,8 +286,8 @@ public class ResultApi {
 	 * @param calloutBaseUrl the base url where the app is running
 	 * @param resultId result id from a previous blockchain transaction
 	 * @return CurrentBlockResponse Gives the details about the block number and the hashes
-	 * @throws XooaApiException
-	 * @throws XooaRequestTimeoutException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
 	public CurrentBlockResponse getResultForCurrentBlock(WebService webService, String calloutBaseUrl, String resultId) throws XooaApiException, XooaRequestTimeoutException {
 		
@@ -359,8 +359,8 @@ public class ResultApi {
 	 * @param calloutBaseUrl the base url where the app is running
 	 * @param resultId result id from a previous blockchain transaction
 	 * @return BlockResponse gives the block number, number of transaction and hashes for the block
-	 * @throws XooaApiException
-	 * @throws XooaRequestTimeoutException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
 	public BlockResponse getResultForBlockByNumber(WebService webService, String calloutBaseUrl, String resultId) throws XooaApiException, XooaRequestTimeoutException {
 		
@@ -427,8 +427,8 @@ public class ResultApi {
 	 * @param calloutBaseUrl the base url where the app is running
 	 * @param resultId result id from a previous blockchain transaction
 	 * @return TransactionResponse data related to the transaction
-	 * @throws XooaApiException
-	 * @throws XooaRequestTimeoutException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
 	public TransactionResponse getResultForTransaction(WebService webService, String calloutBaseUrl, String resultId) throws XooaApiException, XooaRequestTimeoutException {
 		
@@ -494,9 +494,9 @@ public class ResultApi {
 	 * @param webService WebService object used to call the API
 	 * @param calloutBaseUrl the base url where the app is running
 	 * @param resultId result id from a previous blockchain transaction
-	 * @return boolean
-	 * @throws XooaApiException
-	 * @throws XooaRequestTimeoutException
+	 * @return boolean true if the identity was deleted false otherwise.
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
 	public boolean getResultForDeleteIdentity(WebService webService, String calloutBaseUrl, String resultId) throws XooaApiException, XooaRequestTimeoutException {
 		

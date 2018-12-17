@@ -48,8 +48,8 @@ public class IdentityApi {
 	 * @param webService WebService object used to call the API
 	 * @param calloutBaseUrl the base url where the app is running
 	 * @return IdentityResponse Gives the details about the Identity and the access priviliges
-	 * @throws XooaApiException
-	 * @throws XooaRequestTimeoutException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error. 
+	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
 	public IdentityResponse getCurrentIdentity(WebService webService, String calloutBaseUrl) throws XooaApiException, XooaRequestTimeoutException {
 		
@@ -65,8 +65,8 @@ public class IdentityApi {
 	 * @param calloutBaseUrl the base url where the app is running
 	 * @param identityRequest Idnetity Request giving the name, priviliges and attributes related to the new identity 
 	 * @return IdentityResponse Gives the details about the Identity and the access priviliges
-	 * @throws XooaApiException
-	 * @throws XooaRequestTimeoutException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
 	public IdentityResponse enrollIdentity(WebService webService, String calloutBaseUrl, IdentityRequest identityRequest) throws XooaApiException, XooaRequestTimeoutException {
 		
@@ -84,8 +84,8 @@ public class IdentityApi {
 	 * @param identityRequest Idnetity Request giving the name, priviliges and attributes related to the new identity 
 	 * @param timeout The Timeout time to wait before converting the request to async
 	 * @return IdentityResponse Gives the details about the Identity and the access priviliges
-	 * @throws XooaApiException
-	 * @throws XooaRequestTimeoutException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
 	public IdentityResponse enrollIdentity(WebService webService, String calloutBaseUrl, IdentityRequest identityRequest, long timeout) throws XooaApiException, XooaRequestTimeoutException {
 		
@@ -102,7 +102,7 @@ public class IdentityApi {
 	 * @param calloutBaseUrl the base url where the app is running
 	 * @param identityRequest Idnetity Request giving the name, priviliges and attributes related to the new identity 
 	 * @return PendingTransactionResponse Gives the ResultId and ResultUrl for the transaction
-	 * @throws XooaApiException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
 	 */
 	public PendingTransactionResponse enrollIdentityAsync(WebService webService, String calloutBaseUrl, IdentityRequest identityRequest) throws XooaApiException {
 		
@@ -119,8 +119,8 @@ public class IdentityApi {
 	 * @param calloutBaseUrl the base url where the app is running
 	 * @param identityId Id of the identity to regenerate API Token for
 	 * @return IdentityResponse Gives the details about the Identity and the access priviliges
-	 * @throws XooaApiException
-	 * @throws XooaRequestTimeoutException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
 	public IdentityResponse regenerateIdentityApiToken(WebService webService, String calloutBaseUrl, String identityId) throws XooaApiException, XooaRequestTimeoutException {
 		
@@ -137,8 +137,8 @@ public class IdentityApi {
 	 * @param identityId Id of the identity to regenerate API Token for
 	 * @param timeout The Timeout time to wait before converting the request to async
 	 * @return IdentityResponse Gives the details about the Identity and the access priviliges
-	 * @throws XooaApiException
-	 * @throws XooaRequestTimeoutException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
 	public IdentityResponse regenerateIdentityApiToken(WebService webService, String calloutBaseUrl, String identityId, long timeout) throws XooaApiException, XooaRequestTimeoutException {
 		
@@ -154,7 +154,7 @@ public class IdentityApi {
 	 * @param calloutBaseUrl the base url where the app is running
 	 * @param identityId Id of the identity to regenerate API Token for
 	 * @return PendingTransactionResponse Gives the ResultId and ResultUrl for the transaction
-	 * @throws XooaApiException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
 	 */
 	public PendingTransactionResponse regenerateIdentityApiTokenAsync(WebService webService, String calloutBaseUrl, String identityId) throws XooaApiException {
 		
@@ -170,8 +170,8 @@ public class IdentityApi {
 	 * @param calloutBaseUrl the base url where the app is running
 	 * @param identityId Id of the identity to regenerate API Token for
 	 * @return IdentityResponse Gives the details about the Identity and the access priviliges
-	 * @throws XooaApiException
-	 * @throws XooaRequestTimeoutException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
 	public IdentityResponse getIdentity(WebService webService, String calloutBaseUrl, String identityId) throws XooaApiException, XooaRequestTimeoutException {
 		
@@ -187,8 +187,8 @@ public class IdentityApi {
 	 * @param calloutBaseUrl the base url where the app is running
 	 * @param identityId Id of the identity to regenerate API Token for
 	 * @return IdentityResponse Gives the details about the Identity and the access priviliges
-	 * @throws XooaApiException
-	 * @throws XooaRequestTimeoutException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
 	public boolean deleteIdentity(WebService webService, String calloutBaseUrl, String identityId) throws XooaApiException, XooaRequestTimeoutException {
 		
@@ -205,8 +205,8 @@ public class IdentityApi {
 	 * @param identityId Id of the identity to regenerate API Token for
 	 * @param timeout The Timeout time to wait before converting the request to async
 	 * @return IdentityResponse Gives the details about the Identity and the access priviliges
-	 * @throws XooaApiException
-	 * @throws XooaRequestTimeoutException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout. 
 	 */
 	public boolean deleteIdentity(WebService webService, String calloutBaseUrl, String identityId, long timeout) throws XooaApiException, XooaRequestTimeoutException {
 		
@@ -222,7 +222,7 @@ public class IdentityApi {
 	 * @param calloutBaseUrl the base url where the app is running
 	 * @param identityId Id of the identity to regenerate API Token for
 	 * @return PendingTransactionResponse Gives the ResultId and ResultUrl for the transaction
-	 * @throws XooaApiException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
 	 */
 	public PendingTransactionResponse deleteIdentityAsync(WebService webService, String calloutBaseUrl, String identityId) throws XooaApiException {
 		
@@ -237,8 +237,8 @@ public class IdentityApi {
 	 * @param webService WebService object used to call the API
 	 * @param calloutBaseUrl the base url where the app is running
 	 * @return List<IdentityResponse> Gives the details about all the Identities and the access priviliges
-	 * @throws XooaApiException
-	 * @throws XooaRequestTimeoutException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
 	public List<IdentityResponse> getIdentities(WebService webService, String calloutBaseUrl) throws XooaApiException, XooaRequestTimeoutException {
 		
@@ -334,8 +334,8 @@ public class IdentityApi {
 	 * @param requestMethod http method for the call
 	 * @param requestString the request body that needs to be sent
 	 * @return IdentityResponse Gives the details about the Identity and the access priviliges
-	 * @throws XooaApiException
-	 * @throws XooaRequestTimeoutException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
 	private boolean deleteIdentity(WebService webService, String url, String requestMethod, String requestString) throws XooaApiException, XooaRequestTimeoutException {
 		
@@ -387,8 +387,8 @@ public class IdentityApi {
 	 * @param requestMethod http method for the call
 	 * @param requestString the request body that needs to be sent
 	 * @return IdentityResponse Gives the details about the Identity and the access priviliges
-	 * @throws XooaApiException
-	 * @throws XooaRequestTimeoutException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
 	private IdentityResponse callIdentityApi(WebService webService, String url, String requestMethod, String requestString) throws XooaApiException, XooaRequestTimeoutException {
 		
@@ -470,7 +470,7 @@ public class IdentityApi {
 	 * @param requestMethod http method for the call
 	 * @param requestString the request body that needs to be sent
 	 * @return PendingTransactionResponse Gives the ResultId and ResultUrl for the transaction
-	 * @throws XooaApiException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
 	 */
 	private PendingTransactionResponse callIdentityApiAsync(WebService webService, String url, String requestMethod, String requestString) throws XooaApiException {
 		

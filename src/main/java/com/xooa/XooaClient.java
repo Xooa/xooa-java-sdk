@@ -106,7 +106,7 @@ public class XooaClient {
     /**
      * Constructor to get an instance of XooaClient
      * 
-     * @param appUrl Url where the app is deployed. Default to Xooa.
+     * @param appUrl Url where the app is deployed. Default to https://api.xooa.com/api/v1.
      * @param apiToken API Token for the app to connect to
      */
     public XooaClient(String apiToken, String appUrl) {
@@ -138,8 +138,8 @@ public class XooaClient {
     /**
      * To validate if the API Token and App Url are valid and point to an existing App in xooa
      * 
-     * @return
-     * @throws XooaApiException
+     * @return isValid true if API Token is valid, false otherwise.
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
      */
     public boolean isValid() throws XooaApiException {
     	
@@ -207,8 +207,8 @@ public class XooaClient {
      * @param functionName Function name to invoke as defined in the smart contract
      * @param args Arguments to pass to the smart contract
      * @return InvokeResponse Gives the Transaction Id and payload from Xooa
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public InvokeResponse invoke(String functionName, String[] args) throws XooaApiException, XooaRequestTimeoutException {
     	
@@ -230,8 +230,8 @@ public class XooaClient {
      * @param args Arguments to pass to the smart contract
      * @param timeout The Timeout time to wait before converting the request to async
      * @return InvokeResponse Gives the Transaction Id and payload from Xooa
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public InvokeResponse invoke(String functionName, String[] args, long timeout) throws XooaApiException, XooaRequestTimeoutException {
     	
@@ -252,7 +252,7 @@ public class XooaClient {
      * @param functionName Function name to invoke as defined in the smart contract
      * @param args Arguments to pass to the smart contract
      * @return PendingTransactionResponse Gives  the ResultId and ResultUrl for the transaction
-     * @throws XooaApiException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
      */
     public PendingTransactionResponse invokeAsync(String functionName, String[] args) throws XooaApiException {
     	
@@ -276,8 +276,8 @@ public class XooaClient {
      * @param functionName Function name as defined in the smart contract
      * @param args Arguments to pass to the smart contract
      * @return QueryResponse Gives the payload received from the smart contract
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public QueryResponse query(String functionName, String[] args) throws XooaApiException, XooaRequestTimeoutException {
     	
@@ -299,8 +299,8 @@ public class XooaClient {
      * @param args Arguments to pass to the smart contract
      * @param timeout The Timeout time to wait before converting the request to async
      * @return QueryResponse Gives the payload received from the smart contract
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public QueryResponse query(String functionName, String[] args, long timeout) throws XooaApiException, XooaRequestTimeoutException {
     	
@@ -321,7 +321,7 @@ public class XooaClient {
      * @param functionName Function name as defined in the smart contract
      * @param args Arguments to pass to the smart contract
      * @return PendingTransactionResponse Gives  the ResultId and ResultUrl for the transaction
-     * @throws XooaApiException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
      */
     public PendingTransactionResponse queryAsync(String functionName, String[] args) throws XooaApiException {
     	
@@ -335,8 +335,8 @@ public class XooaClient {
      * Returns the current Identity the API Token points to in the app
      * 
      * @return IdentityResponse Gives the details about the Identity and the access priviliges
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public IdentityResponse getCurrentIdentity() throws XooaApiException, XooaRequestTimeoutException {
     	
@@ -348,8 +348,8 @@ public class XooaClient {
      * Required permission: manage identities (canManageIdentities=true)
      * 
      * @return IdentityResponse Gives the details about the Identity and the access priviliges
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public List<IdentityResponse> getIdentities() throws XooaApiException, XooaRequestTimeoutException {
     	
@@ -368,8 +368,8 @@ public class XooaClient {
      * 
      * @param identityRequest Idnetity Request giving the name, priviliges and attributes related to the new identity 
      * @return IdentityResponse Gives the details about the Identity and the access priviliges
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public IdentityResponse enrollIdentity(IdentityRequest identityRequest) throws XooaApiException, XooaRequestTimeoutException {
     	
@@ -389,8 +389,8 @@ public class XooaClient {
      * @param identityRequest Idnetity Request giving the name, priviliges and attributes related to the new identity 
      * @param timeout The Timeout time to wait before converting the request to async
      * @return IdentityResponse Gives the details about the Identity and the access priviliges
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public IdentityResponse enrollIdentity(IdentityRequest identityRequest, long timeout) throws XooaApiException, XooaRequestTimeoutException {
     	
@@ -409,7 +409,7 @@ public class XooaClient {
      * 
      * @param identityRequest Idnetity Request giving the name, priviliges and attributes related to the new identity 
      * @return PendingTransactionResponse Gives  the ResultId and ResultUrl for the transaction
-     * @throws XooaApiException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error. 
      */
     public PendingTransactionResponse enrollIdentityAsync(IdentityRequest identityRequest) throws XooaApiException {
     	
@@ -422,8 +422,8 @@ public class XooaClient {
      * 
      * @param identityId Id of the identity to regenerate API Token for
      * @return IdentityResponse Gives the details about the Identity and the access priviliges
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
+     * @throws XooaApiExceptionIt is thrown in case of any internal error or if the API returns any error.
+     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public IdentityResponse regenerateIdentityApiToken(String identityId) throws XooaApiException, XooaRequestTimeoutException {
     	
@@ -437,8 +437,8 @@ public class XooaClient {
      * @param identityId Id of the identity to regenerate API Token for
      * @param timeout The Timeout time to wait before converting the request to async
      * @return IdentityResponse Gives the details about the Identity and the access priviliges
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public IdentityResponse regenerateIdentityApiToken(String identityId, long timeout) throws XooaApiException, XooaRequestTimeoutException {
     	
@@ -451,8 +451,8 @@ public class XooaClient {
      * 
      * @param identityId Id of the identity to regenerate API Token for
      * @return PendingTransactionResponse Gives the ResultId and ResultUrl for the transaction
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public PendingTransactionResponse regenerateIdentityApiTokenAsync(String identityId) throws XooaApiException {
     	
@@ -465,8 +465,8 @@ public class XooaClient {
      * 
      * @param identityId Id of the identity to regenerate API Token for
      * @return IdentityResponse Gives the details about the Identity and the access priviliges
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public IdentityResponse getIdentity(String identityId) throws XooaApiException, XooaRequestTimeoutException {
     	
@@ -479,8 +479,8 @@ public class XooaClient {
      * 
      * @param identityId Id of the identity to regenerate API Token for
      * @return IdentityResponse Gives the details about the Identity and the access priviliges
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public boolean deleteIdentity(String identityId) throws XooaApiException, XooaRequestTimeoutException {
     	
@@ -494,8 +494,8 @@ public class XooaClient {
      * @param identityId Id of the identity to regenerate API Token for
      * @param timeout The Timeout time to wait before converting the request to async
      * @return IdentityResponse Gives the details about the Identity and the access priviliges
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public boolean deleteIdentity(String identityId, long timeout) throws XooaApiException, XooaRequestTimeoutException {
     	
@@ -508,7 +508,7 @@ public class XooaClient {
      * 
      * @param identityId Id of the identity to regenerate API Token for
      * @return PendingTransactionResponse Gives the ResultId and ResultUrl for the transaction
-     * @throws XooaApiException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
      */
     public PendingTransactionResponse deleteIdentityAsync(String identityId) throws XooaApiException {
     	
@@ -522,8 +522,8 @@ public class XooaClient {
      * Use this endpoint to Get the block number and hashes of current (highest) block in the network
      * 
      * @return CurrentBlockResponse Gives the details about the block number and the hashes
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public CurrentBlockResponse getCurrentBlock() throws XooaApiException, XooaRequestTimeoutException {
     	
@@ -534,7 +534,7 @@ public class XooaClient {
      * Use this endpoint to Get the block number and hashes of current (highest) block in the network
      * 
      * @return PendingTransactionResponse Gives the ResultId and ResultUrl for the transaction
-     * @throws XooaApiException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
      */
     public PendingTransactionResponse getCurrentBlockAsync() throws XooaApiException {
     	
@@ -546,8 +546,8 @@ public class XooaClient {
      * 
      * @param blockNumber block number to get the data for
      * @return BlockResponse gives the block number, number of transaction and hashes for the block 
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public BlockResponse getBlockByNumber(long blockNumber) throws XooaApiException, XooaRequestTimeoutException {
     	
@@ -559,7 +559,7 @@ public class XooaClient {
      * 
      * @param blockNumber block number to get the data for
      * @return PendingTransactionResponse Gives the ResultId and ResultUrl for the transaction
-     * @throws XooaApiException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
      */
     public PendingTransactionResponse getBlockByNumberAsync(long blockNumber) throws XooaApiException {
     	
@@ -571,8 +571,8 @@ public class XooaClient {
      * 
      * @param transactionId transaction Id from a previous Xooa transaction
      * @return TransactionResponse data related to the transaction
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public TransactionResponse getTransaction(String transactionId) throws XooaApiException, XooaRequestTimeoutException {
     	
@@ -584,7 +584,7 @@ public class XooaClient {
      * 
      * @param transactionId transaction id from a previous Xooa transaction
      * @return PendingTransactionResponse Gives the ResultId and ResultUrl for the transaction
-     * @throws XooaApiException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
      */
     public PendingTransactionResponse getTransactionAsync(String transactionId) throws XooaApiException {
     	
@@ -599,8 +599,8 @@ public class XooaClient {
      * 
      * @param resultId result id from a previous blockchain transaction
      * @return InvokeResponse Gives the Transaction Id and payload from Xooa
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public boolean getResultForIdentityDelete(String resultId) throws XooaApiException, XooaRequestTimeoutException {
     	
@@ -612,8 +612,8 @@ public class XooaClient {
      * 
      * @param resultId result id from a previous blockchain transaction
      * @return InvokeResponse Gives the Transaction Id and payload from Xooa
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public InvokeResponse getResultForInvoke(String resultId) throws XooaApiException, XooaRequestTimeoutException {
     	
@@ -625,8 +625,8 @@ public class XooaClient {
      * 
      * @param resultId result id from a previous blockchain transaction
      * @return QueryResponse Gives the payload received from the smart contract
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public QueryResponse getResultForQuery(String resultId) throws XooaApiException, XooaRequestTimeoutException {
     	
@@ -638,8 +638,8 @@ public class XooaClient {
      * 
      * @param resultId result id from a previous blockchain transaction
      * @return IdentityResponse Gives the details about the Identity and the access priviliges
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public IdentityResponse getResultForIdentity(String resultId) throws XooaApiException, XooaRequestTimeoutException {
     	
@@ -651,8 +651,8 @@ public class XooaClient {
      * 
      * @param resultId result id from a previous blockchain transaction
      * @return CurrentBlockResponse Gives the details about the block number and the hashes
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public CurrentBlockResponse getResultForCurrentBlock(String resultId) throws XooaApiException, XooaRequestTimeoutException {
     	
@@ -664,8 +664,8 @@ public class XooaClient {
      * 
      * @param resultId result id from a previous blockchain transaction
      * @return BlockResponse gives the block number, number of transaction and hashes for the block
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error. 
+     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public BlockResponse getResultForBlockByNumber(String resultId) throws XooaApiException, XooaRequestTimeoutException {
     	
@@ -677,8 +677,8 @@ public class XooaClient {
      * 
      * @param resultId result id from a previous blockchain transaction
      * @return TransactionResponse data related to the transaction
-     * @throws XooaApiException
-     * @throws XooaRequestTimeoutException
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public TransactionResponse getResultForTransaction(String resultId) throws XooaApiException, XooaRequestTimeoutException {
     	
@@ -728,7 +728,7 @@ public class XooaClient {
     				
     				iEventListener.onAuthenticated("Auth successful");
     			}
-    		}).on(Socket.EVENT_MESSAGE, new Emitter.Listener() {
+    		}).on("event", new Emitter.Listener() {
     			
     			@Override
     			public void call(Object... args) {

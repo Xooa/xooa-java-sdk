@@ -39,8 +39,8 @@ public class QueryApi {
 	 * @param functionName function to be invoked in the smart contract
 	 * @param args list of arguments to be passed to the queried method
 	 * @return QueryResponse gives the payload assocciated with the query call 
-	 * @throws XooaApiException
-	 * @throws XooaRequestTimeoutException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
 	public QueryResponse query(WebService webService, String calloutBaseUrl, String functionName, String[] args) throws XooaApiException, XooaRequestTimeoutException {
 		
@@ -58,8 +58,8 @@ public class QueryApi {
 	 * @param args list of arguments to be passed to the queried method
 	 * @param timeout The Timeout time to wait before converting the request to async
 	 * @return QueryResponse gives the payload assocciated with the query call 
-	 * @throws XooaApiException
-	 * @throws XooaRequestTimeoutException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
 	public QueryResponse query(WebService webService, String calloutBaseUrl, String functionName, String[] args, long timeout) throws XooaApiException, XooaRequestTimeoutException {
 		
@@ -76,7 +76,7 @@ public class QueryApi {
 	 * @param functionName function to be invoked in the smart contract
 	 * @param args list of arguments to be passed to the queried method
 	 * @return PendingTransactionResponse Gives the ResultId and ResultUrl for the transaction
-	 * @throws XooaApiException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
 	 */
 	public PendingTransactionResponse queryAsync(WebService webService, String calloutBaseUrl, String functionName, String[] args) throws XooaApiException {
 		
@@ -92,8 +92,8 @@ public class QueryApi {
 	 * @param url the base url where the app is running
 	 * @param args list of arguments to be passed to the queried method
 	 * @return QueryResponse gives the payload assocciated with the query call
-	 * @throws XooaApiException
-	 * @throws XooaRequestTimeoutException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
 	private QueryResponse callQueryApi(WebService webService, String url, String[] args) throws XooaApiException, XooaRequestTimeoutException {
 		
@@ -149,7 +149,7 @@ public class QueryApi {
 	 * @param url the base url where the app is running
 	 * @param args list of arguments to be passed to the invoked method
 	 * @return PendingTransactionResponse Gives the ResultId and ResultUrl for the transaction
-	 * @throws XooaApiException
+	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
 	 */
 	private PendingTransactionResponse callQueryApiAsync(WebService webService, String url, String[] args) throws XooaApiException {
 		

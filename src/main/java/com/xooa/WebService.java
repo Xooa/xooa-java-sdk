@@ -72,7 +72,7 @@ public class WebService {
      * 
      * @param baseUrl the base url where the blockchain service is running
      * @return WebCalloutResponse  status code and response received by the call
-     * @throws XooaApiException 
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
      */
     public WebCalloutResponse validateDetails(String baseUrl) throws XooaApiException {
     	
@@ -87,7 +87,7 @@ public class WebService {
      * @param calloutUrl the url to call the invoke api
      * @param args the arguments to pass to the invoke call as request body
      * @return WebCalloutResponse  status code and response received by the call
-     * @throws XooaApiException 
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
      */
     public WebCalloutResponse makeInvokeCall(String calloutUrl, String[] args) throws XooaApiException {
     	
@@ -123,7 +123,7 @@ public class WebService {
      * @param calloutUrl the url to call the query api
      * @param args the arguments to pass to the call as request body
      * @return WebCalloutResponse  status code and response received by the call
-     * @throws XooaApiException 
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
      */
     public WebCalloutResponse makeQueryCall(String calloutUrl, String[] args) throws XooaApiException {
     	
@@ -174,7 +174,7 @@ public class WebService {
      * @param requestMethod the http method for the request 
      * @param requestString the request body
      * @return WebCalloutResponse  status code and response received by the call
-     * @throws XooaApiException 
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
      */
     public WebCalloutResponse makeIdentityCall(String calloutUrl, String requestMethod, String requestString) throws XooaApiException {
     	
@@ -187,7 +187,7 @@ public class WebService {
      * @param calloutUrl the url to call the blockchain api
      * @param requestMethod the http method for the request
      * @return WebCalloutResponse  status code and response received by the call
-     * @throws XooaApiException 
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
      */
     public WebCalloutResponse makeBlockchainCall(String calloutUrl, String requestMethod) throws XooaApiException {
     	
@@ -200,7 +200,7 @@ public class WebService {
      * @param calloutUrl the url to call the transaction api
      * @param requestMethod the http method for the request
      * @return WebCalloutResponse  status code and response received by the call
-     * @throws XooaApiException 
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
      */
     public WebCalloutResponse makeTransactionCall(String calloutUrl, String requestMethod) throws XooaApiException {
     	
@@ -213,7 +213,7 @@ public class WebService {
      * @param calloutUrl the url to call the result api
      * @param requestMethod the http method for the request
      * @return WebCalloutResponse  status code and response received by the call
-     * @throws XooaApiException 
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
      */
     public WebCalloutResponse makeResultCall(String calloutUrl, String requestMethod) throws XooaApiException {
     	
@@ -230,7 +230,7 @@ public class WebService {
      * @param requestMethod The type of Https method - GET, POST, DELETE, etc
      * @param requestBody   The request body to be attached while making the call
      * @return Returns the data from the server as a String
-     * @throws XooaApiException 
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
      */
     private WebCalloutResponse makeHttpCall(String calloutUrl, String requestMethod, String requestBody) throws XooaApiException {
     	
