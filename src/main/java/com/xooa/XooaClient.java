@@ -420,9 +420,9 @@ public class XooaClient {
      * Generates new identity API Token
      * Required permission: manage identities (canManageIdentities=true)
      * 
-     * @param identityId Id of the identity to regenerate API Token for
-     * @return IdentityResponse Gives the details about the Identity and the access priviliges
-     * @throws XooaApiExceptionIt is thrown in case of any internal error or if the API returns any error.
+     * @param identityId Id of the identity to regenerate API Token for.
+     * @return IdentityResponse Gives the details about the Identity and the access privileges.
+     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
      * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public IdentityResponse regenerateIdentityApiToken(String identityId) throws XooaApiException, XooaRequestTimeoutException {

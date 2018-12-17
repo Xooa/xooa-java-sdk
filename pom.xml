@@ -6,7 +6,7 @@
 	
 	<groupId>com.xooa</groupId>
 	<artifactId>xooa-java-sdk</artifactId>
-	<version>1.0.1-snapshot</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	
 	<name>xooa-sdk</name>

@@ -236,7 +236,7 @@ public class IdentityApi {
 	 * 
 	 * @param webService WebService object used to call the API
 	 * @param calloutBaseUrl the base url where the app is running
-	 * @return List<IdentityResponse> Gives the details about all the Identities and the access priviliges
+	 * @return IdentityResponse Gives the details about all the Identities and the access priviliges
 	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
 	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
