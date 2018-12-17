@@ -452,7 +452,6 @@ public class XooaClient {
      * @param identityId Id of the identity to regenerate API Token for
      * @return PendingTransactionResponse Gives the ResultId and ResultUrl for the transaction
      * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
-     * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public PendingTransactionResponse regenerateIdentityApiTokenAsync(String identityId) throws XooaApiException {
     	
