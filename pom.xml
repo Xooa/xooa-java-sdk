@@ -6,7 +6,7 @@
 	
 	<groupId>com.xooa</groupId>
 	<artifactId>xooa-java-sdk</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	
 	<name>xooa-sdk</name>
@@ -147,6 +147,9 @@
         				<artifactId>maven-release-plugin</artifactId>
         				<version>2.5.3</version>
         				<configuration>
+        					<tagNameFormat>v@{project.version}</tagNameFormat>
+      						<autoVersionSubmodules>true</autoVersionSubmodules>
+      						<releaseProfiles>releases</releaseProfiles>
         					<localCheckout>true</localCheckout>
         					<pushChanges>false</pushChanges>
         					<mavenExecutorId>forked-path</mavenExecutorId>
@@ -166,10 +169,20 @@
         				<artifactId>nexus-staging-maven-plugin</artifactId>
         				<version>1.6.7</version>
         				<extensions>true</extensions>
+        				<executions>
+        					<execution>
+        						<id>default-deploy</id>
+        						<phase>deploy</phase>
+        						<goals>
+        							<goal>deploy</goal>
+        						</goals>
+        					</execution>
+        				</executions>
         				<configuration>
         					<serverId>ossrh</serverId>
         					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
         					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+        					<skipStaging>true</skipStaging>
         				</configuration>
         			</plugin>
         			
