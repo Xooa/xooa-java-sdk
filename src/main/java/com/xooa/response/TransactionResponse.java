@@ -138,7 +138,7 @@ public class TransactionResponse {
 	}
 	
 	
-	class ReadSet {
+	static class ReadSet {
 		
 		@SerializedName("chaincode")
 		private String chaincode;
@@ -173,7 +173,7 @@ public class TransactionResponse {
 	}
 	
 	
-	class ReadSubSet {
+	static class ReadSubSet {
 		
 		@SerializedName("key")
 		private String key;
@@ -205,7 +205,7 @@ public class TransactionResponse {
 	}
 	
 	
-	class Version {
+	static class Version {
 		
 		@SerializedName("block_num")
 		private String blockNumber;
@@ -236,7 +236,7 @@ public class TransactionResponse {
 	}
 	
 	
-	class WriteSet {
+	static class WriteSet {
 		
 		@SerializedName("chaincode")
 		private String chaincode;
@@ -272,7 +272,7 @@ public class TransactionResponse {
 	}
 	
 	
-	class WriteSubSet {
+	static class WriteSubSet {
 		
 		@SerializedName("key")
 		private String key;

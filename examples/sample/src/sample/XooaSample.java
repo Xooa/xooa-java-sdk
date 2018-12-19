@@ -15,13 +15,15 @@
  * @author Kavi Sarna
  */
 
-package com.xooa;
+package sample;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONObject;
 
+import com.xooa.IEventListener;
+import com.xooa.XooaClient;
 import com.xooa.exception.XooaApiException;
 import com.xooa.exception.XooaRequestTimeoutException;
 import com.xooa.request.Attributes;
@@ -31,7 +33,7 @@ import com.xooa.response.InvokeResponse;
 import com.xooa.response.PendingTransactionResponse;
 import com.xooa.response.QueryResponse;
 
-public class sample {
+public class XooaSample {
 
 	public static void main(String ...args) throws InterruptedException {
 		

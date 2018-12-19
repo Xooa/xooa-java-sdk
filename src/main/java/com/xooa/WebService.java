@@ -19,6 +19,7 @@
 package com.xooa;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
@@ -30,7 +31,6 @@ import org.apache.logging.log4j.Logger;
 
 import com.xooa.exception.XooaApiException;
 import com.xooa.response.WebCalloutResponse;
-
 
 public class WebService {
 	
@@ -91,30 +91,44 @@ public class WebService {
      */
     public WebCalloutResponse makeInvokeCall(String calloutUrl, String[] args) throws XooaApiException {
     	
-    	StringBuilder requestBody = null;
-    	
-    	if (args != null) {
-    		
-    		requestBody = new StringBuilder();
-            
-    		requestBody.append("[");
-    		
-    		for (int i = 0; i < args.length; i++) {
-    			
-    			requestBody.append("\"");
-                requestBody.append(args[i]);
-                requestBody.append("\"");
+    	try {
+    		if (args != null) {
+        		
+        		StringBuilder requestBody = new StringBuilder();
                 
-                if (i != args.length - 1) {
-                	
-                	requestBody.append(",");
+        		requestBody.append("[");
+        		
+        		for (int i = 0; i < args.length; i++) {
+        			
+        			requestBody.append("\"");
+                    requestBody.append(args[i]);
+                    requestBody.append("\"");
+                    
+                    if (i != args.length - 1) {
+                    	
+                    	requestBody.append(",");
+                    }
                 }
-            }
+        		
+        		requestBody.append("]");
+        		
+        		return makeHttpCall(calloutUrl, REQUEST_METHOD_POST, requestBody.toString());
+        		
+        	} else {
+        		
+        		return makeHttpCall(calloutUrl, REQUEST_METHOD_POST, null);
+        	}
+    	} catch (XooaApiException xae) {
+    		throw xae;
     		
-    		requestBody.append("]");
+    	} catch (Exception e) {
+    		
+    		XooaApiException xae = new XooaApiException();
+    		xae.setErrorCode(0);
+    		xae.setErrorMessage(e.getMessage());
+    		
+    		throw xae;
     	}
-    	
-    	return makeHttpCall(calloutUrl, REQUEST_METHOD_POST, requestBody.toString());
     }
     
     /**
@@ -128,12 +142,10 @@ public class WebService {
     public WebCalloutResponse makeQueryCall(String calloutUrl, String[] args) throws XooaApiException {
     	
     	try {
-    		
-    		StringBuilder requestBody = null;
         	
         	if (args != null) {
         		
-        		requestBody = new StringBuilder();
+        		StringBuilder requestBody = new StringBuilder();
         		
         		requestBody.append("[");
         		
@@ -149,10 +161,13 @@ public class WebService {
                 }
         		
         		requestBody.append("]");
+        		
+        		return makeHttpCall(calloutUrl, REQUEST_METHOD_POST, requestBody.toString());
+        		
+        	} else {
+        		
+        		return makeHttpCall(calloutUrl, REQUEST_METHOD_POST, null);
         	}
-        	
-        	return makeHttpCall(calloutUrl, REQUEST_METHOD_POST, requestBody.toString());
-    	
     	} catch (XooaApiException xae) {
     		
     		throw xae;
@@ -234,6 +249,9 @@ public class WebService {
      */
     private WebCalloutResponse makeHttpCall(String calloutUrl, String requestMethod, String requestBody) throws XooaApiException {
     	
+    	OutputStreamWriter writeStream = null;
+    	BufferedReader inputReader = null;
+    	
     	try {
     		
     		URL url = new URL(calloutUrl);
@@ -245,22 +263,22 @@ public class WebService {
             httpsConnection.setRequestProperty("Content-Type", "application/json");
             httpsConnection.setRequestProperty("Authorization", "bearer " + apiToken);
             
-            if (requestBody != "" && requestBody != null) {
+            if (!(requestBody.equals("")) && !requestBody.equals(null)) {
             	
             	logger.debug(requestBody);
             	
-            	OutputStreamWriter wr = new OutputStreamWriter(httpsConnection.getOutputStream());
+            	writeStream = new OutputStreamWriter(httpsConnection.getOutputStream(), "UTF-8");
             	
-            	wr.write(requestBody);
-                wr.flush();
+            	writeStream.write(requestBody);
+            	writeStream.flush();
             }
             
-            BufferedReader in = new BufferedReader(new InputStreamReader(httpsConnection.getInputStream()));
+            inputReader = new BufferedReader(new InputStreamReader(httpsConnection.getInputStream(), "UTF-8"));
             
             String line;
             StringBuilder content = new StringBuilder();
             
-            while ((line = in.readLine()) != null) {
+            while (!(line = inputReader.readLine()).equals(null)) {
             	
             	content.append(line);
             	content.append(System.lineSeparator());
@@ -283,6 +301,13 @@ public class WebService {
         	apiException.setErrorMessage(e.getMessage());
         	
         	throw apiException;
+        } finally {
+        	try {
+        		writeStream.close();
+        		inputReader.close();
+        	} catch (IOException ioe) {
+        		
+        	}
         }
     }
 }
