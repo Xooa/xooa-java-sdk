@@ -37,7 +37,6 @@ public class Attributes {
 	@SerializedName("value")
 	private String value;
 
-
 	public String getName() {
 
 		return name;

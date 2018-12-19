@@ -21,7 +21,8 @@ package com.xooa.response;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Current Block Response received when a request is made to retrieve current block data from API.
+ * Current Block Response received when a request is made to retrieve current
+ * block data from API.
  *
  * @author kavi
  *
@@ -36,7 +37,6 @@ public class CurrentBlockResponse {
 
 	@SerializedName("blockNumber")
 	private long blockNumber;
-
 
 	public String getCurrentBlockHash() {
 

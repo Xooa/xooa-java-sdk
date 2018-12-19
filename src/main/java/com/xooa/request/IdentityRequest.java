@@ -30,67 +30,66 @@ import com.google.gson.annotations.SerializedName;
  */
 public class IdentityRequest {
 
-    @SerializedName("IdentityName")
-    private String identityName;
+	@SerializedName("IdentityName")
+	private String identityName;
 
-    @SerializedName("Access")
-    private String accessType;
+	@SerializedName("Access")
+	private String accessType;
 
-    @SerializedName("canManageIdentities")
-    private boolean canManageIdentities;
+	@SerializedName("canManageIdentities")
+	private boolean canManageIdentities;
 
-    @SerializedName("Attrs")
-    private List<Attributes> attributes;
+	@SerializedName("Attrs")
+	private List<Attributes> attributes;
 
+	public String getIdentityName() {
 
-    public String getIdentityName() {
+		return identityName;
+	}
 
-    	return identityName;
-    }
+	public void setIdentityName(String identityName) {
 
-    public void setIdentityName(String identityName) {
+		this.identityName = identityName;
+	}
 
-    	this.identityName = identityName;
-    }
+	public String getAccessType() {
 
-    public String getAccessType() {
+		return accessType;
+	}
 
-    	return accessType;
-    }
+	public void setAccessType(String accessType) {
 
-    public void setAccessType(String accessType) {
+		this.accessType = accessType;
+	}
 
-    	this.accessType = accessType;
-    }
+	public boolean isCanManageIdentities() {
 
-    public boolean isCanManageIdentities() {
+		return canManageIdentities;
+	}
 
-    	return canManageIdentities;
-    }
+	public void setCanManageIdentities(boolean canManageIdentities) {
 
-    public void setCanManageIdentities(boolean canManageIdentities) {
+		this.canManageIdentities = canManageIdentities;
+	}
 
-    	this.canManageIdentities = canManageIdentities;
-    }
+	public List<Attributes> getAttributes() {
 
-    public List<Attributes> getAttributes() {
+		return attributes;
+	}
 
-    	return attributes;
-    }
+	public void setAttributes(List<Attributes> attributes) {
 
-    public void setAttributes(List<Attributes> attributes) {
+		this.attributes = attributes;
+	}
 
-    	this.attributes = attributes;
-    }
+	public void display() {
+		System.out.println("Identity Name - " + identityName);
+		System.out.println("Access Type - " + accessType);
+		System.out.println("Can Manage Identities - " + canManageIdentities);
+		System.out.println("\nAttributes - ");
 
-    public void display() {
-    	System.out.println("Identity Name - " + identityName);
-    	System.out.println("Access Type - " + accessType);
-    	System.out.println("Can Manage Identities - " + canManageIdentities);
-    	System.out.println("\nAttributes - ");
-
-    	for (Attributes attribute : attributes) {
-    		attribute.display();
-    	}
-    }
+		for (Attributes attribute : attributes) {
+			attribute.display();
+		}
+	}
 }

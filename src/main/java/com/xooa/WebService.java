@@ -2,7 +2,7 @@
  * Java SDK for Xooa
  *
  * Copyright 2018 Xooa
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at:
  *
@@ -41,283 +41,290 @@ import com.xooa.response.WebCalloutResponse;
 public class WebService {
 
 	public static final String REQUEST_METHOD_GET = "GET";
-    public static final String REQUEST_METHOD_POST = "POST";
-    public static final String REQUEST_METHOD_DELETE = "DELETE";
+	public static final String REQUEST_METHOD_POST = "POST";
+	public static final String REQUEST_METHOD_DELETE = "DELETE";
 
-    static Logger logger = LogManager.getLogger(WebService.class.getName());
+	private static Logger logger = LogManager.getLogger(WebService.class.getName());
 
-    private String apiToken;
+	private String apiToken;
 
-    public void setApiToken(String apiToken) {
-    	this.apiToken = apiToken;
-    }
+	public void setApiToken(String apiToken) {
+		this.apiToken = apiToken;
+	}
 
+	// -------- CLASS CONSTRUCTORS ---------
 
-    // -------- CLASS CONSTRUCTORS ---------
+	// Default constructor to get an instance of WebService
+	public WebService() {
 
-    // Default constructor to get an instance of WebService
-    public WebService() {
+	}
 
-    }
+	/**
+	 * Constructor to get an instance of WebService
+	 *
+	 * @param apiToken ApiToken to be used in the HTTPS header
+	 */
+	public WebService(String apiToken) {
 
-    /**
-     * Constructor to get an instance of WebService
-     *
-     * @param apiToken ApiToken to be used in the HTTPS header
-     */
-    public WebService(String apiToken) {
+		this.apiToken = apiToken;
+	}
 
-    	this.apiToken = apiToken;
-    }
+	// -------- PUBLIC CLASS METHODS ---------
 
+	/**
+	 * To validate the details eneterd by the user by invoking the Identities Api
+	 * 
+	 * @param baseUrl the base url where the blockchain service is running
+	 * @return WebCalloutResponse status code and response received by the call
+	 * @throws XooaApiException It is thrown in case of any internal error or if the
+	 *                          API returns any error.
+	 */
+	public WebCalloutResponse validateDetails(String baseUrl) throws XooaApiException {
 
-    // -------- PUBLIC CLASS METHODS ---------
+		String calloutUrl = baseUrl + "/identities/me";
 
-    /**
-     * To validate the details eneterd by the user by invoking the Identities Api
-     * 
-     * @param baseUrl the base url where the blockchain service is running
-     * @return WebCalloutResponse  status code and response received by the call
-     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
-     */
-    public WebCalloutResponse validateDetails(String baseUrl) throws XooaApiException {
+		return makeHttpCall(calloutUrl, REQUEST_METHOD_GET, null);
+	}
 
-    	String calloutUrl = baseUrl + "/identities/me";
+	/**
+	 * Create a request to Xooa for an Invoke Request.
+	 *
+	 * @param calloutUrl the url to call the invoke api
+	 * @param args       the arguments to pass to the invoke call as request body
+	 * @return WebCalloutResponse status code and response received by the call
+	 * @throws XooaApiException It is thrown in case of any internal error or if the
+	 *                          API returns any error.
+	 */
+	public WebCalloutResponse makeInvokeCall(String calloutUrl, String[] args) throws XooaApiException {
 
-    	return makeHttpCall(calloutUrl, REQUEST_METHOD_GET, null);
-    }
+		try {
+			if (args != null) {
 
-    /**
-     * Create a request to Xooa for an Invoke Request 
-     * 
-     * @param calloutUrl the url to call the invoke api
-     * @param args the arguments to pass to the invoke call as request body
-     * @return WebCalloutResponse  status code and response received by the call
-     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
-     */
-    public WebCalloutResponse makeInvokeCall(String calloutUrl, String[] args) throws XooaApiException {
+				StringBuilder requestBody = new StringBuilder();
 
-    	try {
-    		if (args != null) {
+				requestBody.append("[");
 
-        		StringBuilder requestBody = new StringBuilder();
+				for (int i = 0; i < args.length; i++) {
 
-        		requestBody.append("[");
+					requestBody.append("\"");
+					requestBody.append(args[i]);
+					requestBody.append("\"");
 
-        		for (int i = 0; i < args.length; i++) {
+					if (i != args.length - 1) {
 
-        			requestBody.append("\"");
-                    requestBody.append(args[i]);
-                    requestBody.append("\"");
+						requestBody.append(",");
+					}
+				}
 
-                    if (i != args.length - 1) {
+				requestBody.append("]");
 
-                    	requestBody.append(",");
-                    }
-                }
+				return makeHttpCall(calloutUrl, REQUEST_METHOD_POST, requestBody.toString());
 
-        		requestBody.append("]");
+			} else {
 
-        		return makeHttpCall(calloutUrl, REQUEST_METHOD_POST, requestBody.toString());
+				return makeHttpCall(calloutUrl, REQUEST_METHOD_POST, null);
+			}
+		} catch (XooaApiException xae) {
+			throw xae;
 
-        	} else {
+		} catch (Exception e) {
 
-        		return makeHttpCall(calloutUrl, REQUEST_METHOD_POST, null);
-        	}
-    	} catch (XooaApiException xae) {
-    		throw xae;
+			XooaApiException xae = new XooaApiException();
+			xae.setErrorCode(0);
+			xae.setErrorMessage(e.getMessage());
 
-    	} catch (Exception e) {
+			throw xae;
+		}
+	}
 
-    		XooaApiException xae = new XooaApiException();
-    		xae.setErrorCode(0);
-    		xae.setErrorMessage(e.getMessage());
+	/**
+	 * Create a request to Xooa for a Query Request.
+	 *
+	 * @param calloutUrl the url to call the query api
+	 * @param args       the arguments to pass to the call as request body
+	 * @return WebCalloutResponse status code and response received by the call
+	 * @throws XooaApiException It is thrown in case of any internal error or if the
+	 *                          API returns any error.
+	 */
+	public WebCalloutResponse makeQueryCall(String calloutUrl, String[] args) throws XooaApiException {
+
+		try {
+
+			if (args != null) {
+
+				StringBuilder requestBody = new StringBuilder();
+
+				requestBody.append("[");
+
+				for (int i = 0; i < args.length; i++) {
+
+					requestBody.append("\"");
+					requestBody.append(args[i]);
+					requestBody.append("\"");
+
+					if (i != args.length - 1) {
+						requestBody.append(",");
+					}
+				}
+
+				requestBody.append("]");
+
+				return makeHttpCall(calloutUrl, REQUEST_METHOD_POST, requestBody.toString());
+
+			} else {
+
+				return makeHttpCall(calloutUrl, REQUEST_METHOD_POST, null);
+			}
+		} catch (XooaApiException xae) {
+
+			throw xae;
+
+		} catch (Exception e) {
+
+			XooaApiException xae = new XooaApiException();
+			xae.setErrorCode(0);
+			xae.setErrorMessage(e.getMessage());
+
+			throw xae;
+		}
+	}
+
+	/**
+	 * Create a request to Xooa for a Identity Request
+	 *
+	 * @param calloutUrl    the url to call the identity api
+	 * @param requestMethod the http method for the request
+	 * @param requestString the request body
+	 * @return WebCalloutResponse status code and response received by the call
+	 * @throws XooaApiException It is thrown in case of any internal error or if the
+	 *                          API returns any error.
+	 */
+	public WebCalloutResponse makeIdentityCall(String calloutUrl, String requestMethod, String requestString)
+			throws XooaApiException {
 
-    		throw xae;
-    	}
-    }
+		return makeHttpCall(calloutUrl, requestMethod, requestString);
+	}
 
-    /**
-     * Create a request to Xooa for a Query Request 
-     * 
-     * @param calloutUrl the url to call the query api
-     * @param args the arguments to pass to the call as request body
-     * @return WebCalloutResponse  status code and response received by the call
-     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
-     */
-    public WebCalloutResponse makeQueryCall(String calloutUrl, String[] args) throws XooaApiException {
-
-    	try {
-
-        	if (args != null) {
-
-        		StringBuilder requestBody = new StringBuilder();
-
-        		requestBody.append("[");
-
-        		for (int i = 0; i < args.length; i++) {
-
-        			requestBody.append("\"");
-                    requestBody.append(args[i]);
-                    requestBody.append("\"");
-
-                    if (i != args.length - 1) {
-                    	requestBody.append(",");
-                    }
-                }
+	/**
+	 * Create a request to Xooa for a Blockchain Request
+	 *
+	 * @param calloutUrl    the url to call the blockchain api
+	 * @param requestMethod the http method for the request
+	 * @return WebCalloutResponse status code and response received by the call
+	 * @throws XooaApiException It is thrown in case of any internal error or if the
+	 *                          API returns any error.
+	 */
+	public WebCalloutResponse makeBlockchainCall(String calloutUrl, String requestMethod) throws XooaApiException {
 
-        		requestBody.append("]");
-
-        		return makeHttpCall(calloutUrl, REQUEST_METHOD_POST, requestBody.toString());
+		return makeHttpCall(calloutUrl, requestMethod, null);
+	}
 
-        	} else {
-
-        		return makeHttpCall(calloutUrl, REQUEST_METHOD_POST, null);
-        	}
-    	} catch (XooaApiException xae) {
-
-    		throw xae;
-
-    	} catch (Exception e) {
-
-    		XooaApiException xae = new XooaApiException();
-    		xae.setErrorCode(0);
-    		xae.setErrorMessage(e.getMessage());
-
-    		throw xae;
-    	}
-    }
-
-    /**
-     * Create a request to Xooa for a Identity Request
-     * 
-     * @param calloutUrl the url to call the identity api
-     * @param requestMethod the http method for the request 
-     * @param requestString the request body
-     * @return WebCalloutResponse  status code and response received by the call
-     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
-     */
-    public WebCalloutResponse makeIdentityCall(String calloutUrl, String requestMethod, String requestString) throws XooaApiException {
-
-    	return makeHttpCall(calloutUrl, requestMethod, requestString);
-    }
-
-    /**
-     * Create a request to Xooa for a Blockchain Request
-     * 
-     * @param calloutUrl the url to call the blockchain api
-     * @param requestMethod the http method for the request
-     * @return WebCalloutResponse  status code and response received by the call
-     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
-     */
-    public WebCalloutResponse makeBlockchainCall(String calloutUrl, String requestMethod) throws XooaApiException {
-
-    	return makeHttpCall(calloutUrl, requestMethod, null);
-    }
-
-    /**
-     * Create a request to Xooa for a Transaction Request
-     * 
-     * @param calloutUrl the url to call the transaction api
-     * @param requestMethod the http method for the request
-     * @return WebCalloutResponse  status code and response received by the call
-     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
-     */
-    public WebCalloutResponse makeTransactionCall(String calloutUrl, String requestMethod) throws XooaApiException {
-
-    	return makeHttpCall(calloutUrl, requestMethod, null);
-    }
-
-    /**
-     * Create a request to Xooa for a Result Request
-     * 
-     * @param calloutUrl the url to call the result api
-     * @param requestMethod the http method for the request
-     * @return WebCalloutResponse  status code and response received by the call
-     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
-     */
-    public WebCalloutResponse makeResultCall(String calloutUrl, String requestMethod) throws XooaApiException {
-
-    	return makeHttpCall(calloutUrl, requestMethod, null);
-    }
-
-
-    // -------- PRIVATE CLASS METHODS ---------
-
-    /**
-     * Provides a way to call the server
-     *
-     * @param calloutUrl    The server url to be called
-     * @param requestMethod The type of Https method - GET, POST, DELETE, etc
-     * @param requestBody   The request body to be attached while making the call
-     * @return Returns the data from the server as a String
-     * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
-     */
-    private WebCalloutResponse makeHttpCall(String calloutUrl, String requestMethod, String requestBody) throws XooaApiException {
-
-    	OutputStreamWriter writeStream = null;
-    	BufferedReader inputReader = null;
-
-    	try {
-
-    		URL url = new URL(calloutUrl);
-
-    		HttpsURLConnection httpsConnection = (HttpsURLConnection) url.openConnection();
-
-    		httpsConnection.setDoOutput(true);
-            httpsConnection.setRequestMethod(requestMethod);
-            httpsConnection.setRequestProperty("Content-Type", "application/json");
-            httpsConnection.setRequestProperty("Authorization", "bearer " + apiToken);
-
-            if (!(requestBody.equals("")) && requestBody != null) {
-
-            	logger.debug(requestBody);
-
-            	writeStream = new OutputStreamWriter(httpsConnection.getOutputStream(), "UTF-8");
-
-            	writeStream.write(requestBody);
-            	writeStream.flush();
-            }
-
-            inputReader = new BufferedReader(new InputStreamReader(httpsConnection.getInputStream(), "UTF-8"));
-
-            String line;
-            StringBuilder content = new StringBuilder();
-
-            while ((line = inputReader.readLine()) != null) {
-
-            	content.append(line);
-            	content.append(System.lineSeparator());
-            }
-
-            logger.debug(content.toString());
-
-            WebCalloutResponse response = new WebCalloutResponse();
-            response.setResponseCode(httpsConnection.getResponseCode());
-            response.setResponseText(content.toString());
-
-            return response;
-
-        } catch (Exception e) {
-
-        	logger.error(e);
-
-        	XooaApiException apiException = new XooaApiException();
-        	apiException.setErrorCode(0);
-        	apiException.setErrorMessage(e.getMessage());
-
-        	throw apiException;
-        } finally {
-        	try {
-        		if (writeStream != null) {
-        			writeStream.close();
-        		}
-        		if (inputReader != null) {
-        			inputReader.close();
-        		}
-        	} catch (IOException ioe) {
-        		logger.error("Ignorable - Exception closing the IO Streams");
-        	}
-        }
-    }
+	/**
+	 * Create a request to Xooa for a Transaction Request
+	 *
+	 * @param calloutUrl    the url to call the transaction api
+	 * @param requestMethod the http method for the request
+	 * @return WebCalloutResponse status code and response received by the call
+	 * @throws XooaApiException It is thrown in case of any internal error or if the
+	 *                          API returns any error.
+	 */
+	public WebCalloutResponse makeTransactionCall(String calloutUrl, String requestMethod) throws XooaApiException {
+
+		return makeHttpCall(calloutUrl, requestMethod, null);
+	}
+
+	/**
+	 * Create a request to Xooa for a Result Request
+	 *
+	 * @param calloutUrl    the url to call the result api
+	 * @param requestMethod the http method for the request
+	 * @return WebCalloutResponse status code and response received by the call
+	 * @throws XooaApiException It is thrown in case of any internal error or if the
+	 *                          API returns any error.
+	 */
+	public WebCalloutResponse makeResultCall(String calloutUrl, String requestMethod) throws XooaApiException {
+
+		return makeHttpCall(calloutUrl, requestMethod, null);
+	}
+
+	// -------- PRIVATE CLASS METHODS ---------
+
+	/**
+	 * Provides a way to call the server
+	 *
+	 * @param calloutUrl    The server url to be called
+	 * @param requestMethod The type of Https method - GET, POST, DELETE, etc
+	 * @param requestBody   The request body to be attached while making the call
+	 * @return Returns the data from the server as a String
+	 * @throws XooaApiException It is thrown in case of any internal error or if the
+	 *                          API returns any error.
+	 */
+	private WebCalloutResponse makeHttpCall(String calloutUrl, String requestMethod, String requestBody)
+			throws XooaApiException {
+
+		OutputStreamWriter writeStream = null;
+		BufferedReader inputReader = null;
+
+		try {
+
+			URL url = new URL(calloutUrl);
+
+			HttpsURLConnection httpsConnection = (HttpsURLConnection) url.openConnection();
+
+			httpsConnection.setDoOutput(true);
+			httpsConnection.setRequestMethod(requestMethod);
+			httpsConnection.setRequestProperty("Content-Type", "application/json");
+			httpsConnection.setRequestProperty("Authorization", "bearer " + apiToken);
+
+			if ((requestBody != null) && !(requestBody.equals(""))) {
+
+				logger.debug(requestBody);
+
+				writeStream = new OutputStreamWriter(httpsConnection.getOutputStream(), "UTF-8");
+
+				writeStream.write(requestBody);
+				writeStream.flush();
+			}
+
+			inputReader = new BufferedReader(new InputStreamReader(httpsConnection.getInputStream(), "UTF-8"));
+
+			String line;
+			StringBuilder content = new StringBuilder();
+
+			while ((line = inputReader.readLine()) != null) {
+
+				content.append(line);
+				content.append(System.lineSeparator());
+			}
+
+			logger.debug(content.toString());
+
+			WebCalloutResponse response = new WebCalloutResponse();
+			response.setResponseCode(httpsConnection.getResponseCode());
+			response.setResponseText(content.toString());
+
+			return response;
+
+		} catch (Exception e) {
+
+			logger.error(e);
+
+			XooaApiException apiException = new XooaApiException();
+			apiException.setErrorCode(0);
+			apiException.setErrorMessage(e.getMessage());
+
+			throw apiException;
+		} finally {
+			try {
+				if (writeStream != null) {
+					writeStream.close();
+				}
+				if (inputReader != null) {
+					inputReader.close();
+				}
+			} catch (IOException ioe) {
+				logger.error("Ignorable - Exception closing the IO Streams");
+			}
+		}
+	}
 }

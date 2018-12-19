@@ -43,470 +43,488 @@ import com.xooa.response.WebCalloutResponse;
  *
  */
 public class IdentityApi {
-	
-	
+
 	static Logger logger = LogManager.getLogger(IdentityApi.class.getName());
-	
+
 	/**
 	 * Call the Identity API
 	 * 
-	 * @param webService WebService object used to call the API
+	 * @param webService     WebService object used to call the API
 	 * @param calloutBaseUrl the base url where the app is running
 	 * @return IdentityResponse Gives the details about the Identity and the access priviliges
-	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error. 
+	 * @throws XooaApiException            It is thrown in case of any internal error or if the API returns any error.
 	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
-	public IdentityResponse getCurrentIdentity(WebService webService, String calloutBaseUrl) throws XooaApiException, XooaRequestTimeoutException {
-		
+	public IdentityResponse getCurrentIdentity(WebService webService, String calloutBaseUrl)
+			throws XooaApiException, XooaRequestTimeoutException {
+
 		String url = calloutBaseUrl + "/identities/me";
-		
+
 		return callIdentityApi(webService, url, WebService.REQUEST_METHOD_GET, null);
 	}
-	
+
 	/**
 	 * Call the Identity API
 	 * 
-	 * @param webService WebService object used to call the API
-	 * @param calloutBaseUrl the base url where the app is running
-	 * @param identityRequest Idnetity Request giving the name, priviliges and attributes related to the new identity 
+	 * @param webService      WebService object used to call the API
+	 * @param calloutBaseUrl  the base url where the app is running
+	 * @param identityRequest Idnetity Request giving the name, priviliges and attributes related to the new identity
 	 * @return IdentityResponse Gives the details about the Identity and the access priviliges
-	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaApiException            It is thrown in case of any internal error or if the API returns any error.
 	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
-	public IdentityResponse enrollIdentity(WebService webService, String calloutBaseUrl, IdentityRequest identityRequest) throws XooaApiException, XooaRequestTimeoutException {
-		
+	public IdentityResponse enrollIdentity(WebService webService, String calloutBaseUrl,
+			IdentityRequest identityRequest) throws XooaApiException, XooaRequestTimeoutException {
+
 		String url = calloutBaseUrl + "/identities";
-        String requestString = new Gson().toJson(identityRequest);
-        
-        return callIdentityApi(webService, url, WebService.REQUEST_METHOD_POST, requestString);
-    }
-	
+		String requestString = new Gson().toJson(identityRequest);
+
+		return callIdentityApi(webService, url, WebService.REQUEST_METHOD_POST, requestString);
+	}
+
 	/**
 	 * Call the Identity API
 	 * 
-	 * @param webService WebService object used to call the API
-	 * @param calloutBaseUrl the base url where the app is running
-	 * @param identityRequest Idnetity Request giving the name, priviliges and attributes related to the new identity 
-	 * @param timeout The Timeout time to wait before converting the request to async
+	 * @param webService      WebService object used to call the API
+	 * @param calloutBaseUrl  the base url where the app is running
+	 * @param identityRequest Idnetity Request giving the name, priviliges and attributes related to the new identity
+	 * @param timeout         The Timeout time to wait before converting the request to async
 	 * @return IdentityResponse Gives the details about the Identity and the access priviliges
-	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaApiException            It is thrown in case of any internal error or if the API returns any error.
 	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
-	public IdentityResponse enrollIdentity(WebService webService, String calloutBaseUrl, IdentityRequest identityRequest, long timeout) throws XooaApiException, XooaRequestTimeoutException {
-		
+	public IdentityResponse enrollIdentity(WebService webService, String calloutBaseUrl,
+			IdentityRequest identityRequest, long timeout) throws XooaApiException, XooaRequestTimeoutException {
+
 		String url = calloutBaseUrl + "/identities/?timeout=" + timeout;
-        String requestString = new Gson().toJson(identityRequest);
-        
-        return callIdentityApi(webService, url, WebService.REQUEST_METHOD_POST, requestString);
-    }
-	
+		String requestString = new Gson().toJson(identityRequest);
+
+		return callIdentityApi(webService, url, WebService.REQUEST_METHOD_POST, requestString);
+	}
+
 	/**
 	 * Call the Identity API in async
 	 * 
-	 * @param webService WebService object used to call the API
-	 * @param calloutBaseUrl the base url where the app is running
-	 * @param identityRequest Idnetity Request giving the name, priviliges and attributes related to the new identity 
+	 * @param webService      WebService object used to call the API
+	 * @param calloutBaseUrl  the base url where the app is running
+	 * @param identityRequest Idnetity Request giving the name, priviliges and attributes related to the new identity
 	 * @return PendingTransactionResponse Gives the ResultId and ResultUrl for the transaction
 	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
 	 */
-	public PendingTransactionResponse enrollIdentityAsync(WebService webService, String calloutBaseUrl, IdentityRequest identityRequest) throws XooaApiException {
-		
+	public PendingTransactionResponse enrollIdentityAsync(WebService webService, String calloutBaseUrl,
+			IdentityRequest identityRequest) throws XooaApiException {
+
 		String url = calloutBaseUrl + "/identities/?async=true";
-        String requestString = new Gson().toJson(identityRequest);
-        
-        return callIdentityApiAsync(webService, url, WebService.REQUEST_METHOD_POST, requestString);
+		String requestString = new Gson().toJson(identityRequest);
+
+		return callIdentityApiAsync(webService, url, WebService.REQUEST_METHOD_POST, requestString);
 	}
-	
+
 	/**
 	 * Call the Identity API
 	 * 
-	 * @param webService WebService object used to call the API
+	 * @param webService     WebService object used to call the API
 	 * @param calloutBaseUrl the base url where the app is running
-	 * @param identityId Id of the identity to regenerate API Token for
+	 * @param identityId     Id of the identity to regenerate API Token for
 	 * @return IdentityResponse Gives the details about the Identity and the access priviliges
-	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaApiException            It is thrown in case of any internal error or if the API returns any error.
 	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
-	public IdentityResponse regenerateIdentityApiToken(WebService webService, String calloutBaseUrl, String identityId) throws XooaApiException, XooaRequestTimeoutException {
-		
+	public IdentityResponse regenerateIdentityApiToken(WebService webService, String calloutBaseUrl, String identityId)
+			throws XooaApiException, XooaRequestTimeoutException {
+
 		String url = calloutBaseUrl + "/identities/" + identityId + "/regeneratetoken";
-		 
+
 		return callIdentityApi(webService, url, WebService.REQUEST_METHOD_POST, null);
 	}
-	
+
 	/**
 	 * Call the Identity API
 	 * 
-	 * @param webService WebService object used to call the API
+	 * @param webService     WebService object used to call the API
 	 * @param calloutBaseUrl the base url where the app is running
-	 * @param identityId Id of the identity to regenerate API Token for
-	 * @param timeout The Timeout time to wait before converting the request to async
+	 * @param identityId     Id of the identity to regenerate API Token for
+	 * @param timeout        The Timeout time to wait before converting the request to async
 	 * @return IdentityResponse Gives the details about the Identity and the access priviliges
-	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaApiException            It is thrown in case of any internal error or if the API returns any error.
 	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
-	public IdentityResponse regenerateIdentityApiToken(WebService webService, String calloutBaseUrl, String identityId, long timeout) throws XooaApiException, XooaRequestTimeoutException {
-		
+	public IdentityResponse regenerateIdentityApiToken(WebService webService, String calloutBaseUrl, String identityId,
+			long timeout) throws XooaApiException, XooaRequestTimeoutException {
+
 		String url = calloutBaseUrl + "/identities/" + identityId + "/regeneratetoken/?timeout=" + timeout;
-		
+
 		return callIdentityApi(webService, url, WebService.REQUEST_METHOD_POST, null);
 	}
-	
+
 	/**
 	 * Call the Identity API in async
 	 * 
-	 * @param webService WebService object used to call the API
+	 * @param webService     WebService object used to call the API
 	 * @param calloutBaseUrl the base url where the app is running
-	 * @param identityId Id of the identity to regenerate API Token for
+	 * @param identityId     Id of the identity to regenerate API Token for
 	 * @return PendingTransactionResponse Gives the ResultId and ResultUrl for the transaction
 	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
 	 */
-	public PendingTransactionResponse regenerateIdentityApiTokenAsync(WebService webService, String calloutBaseUrl, String identityId) throws XooaApiException {
-		
+	public PendingTransactionResponse regenerateIdentityApiTokenAsync(WebService webService, String calloutBaseUrl,
+			String identityId) throws XooaApiException {
+
 		String url = calloutBaseUrl + "/identities/" + identityId + "/regeneratetoken?async=true";
-		
+
 		return callIdentityApiAsync(webService, url, WebService.REQUEST_METHOD_POST, null);
 	}
-	
+
 	/**
 	 * Call the Identity API
 	 * 
-	 * @param webService WebService object used to call the API
+	 * @param webService     WebService object used to call the API
 	 * @param calloutBaseUrl the base url where the app is running
-	 * @param identityId Id of the identity to regenerate API Token for
+	 * @param identityId     Id of the identity to regenerate API Token for
 	 * @return IdentityResponse Gives the details about the Identity and the access priviliges
-	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaApiException            It is thrown in case of any internal error or if the API returns any error.
 	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
-	public IdentityResponse getIdentity(WebService webService, String calloutBaseUrl, String identityId) throws XooaApiException, XooaRequestTimeoutException {
-		
+	public IdentityResponse getIdentity(WebService webService, String calloutBaseUrl, String identityId)
+			throws XooaApiException, XooaRequestTimeoutException {
+
 		String url = calloutBaseUrl + "/identities/" + identityId;
-		
+
 		return callIdentityApi(webService, url, WebService.REQUEST_METHOD_GET, null);
 	}
-	
+
 	/**
 	 * Call the Identity API
 	 * 
-	 * @param webService WebService object used to call the API
+	 * @param webService     WebService object used to call the API
 	 * @param calloutBaseUrl the base url where the app is running
-	 * @param identityId Id of the identity to regenerate API Token for
+	 * @param identityId     Id of the identity to regenerate API Token for
 	 * @return IdentityResponse Gives the details about the Identity and the access priviliges
-	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaApiException            It is thrown in case of any internal error or if the API returns any error.
 	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
-	public boolean deleteIdentity(WebService webService, String calloutBaseUrl, String identityId) throws XooaApiException, XooaRequestTimeoutException {
-		
+	public boolean deleteIdentity(WebService webService, String calloutBaseUrl, String identityId)
+			throws XooaApiException, XooaRequestTimeoutException {
+
 		String url = calloutBaseUrl + "/identities/" + identityId;
-		
+
 		return deleteIdentity(webService, url, WebService.REQUEST_METHOD_DELETE, null);
 	}
-	
+
 	/**
 	 * Call the Identity API
 	 * 
-	 * @param webService WebService object used to call the API
+	 * @param webService     WebService object used to call the API
 	 * @param calloutBaseUrl the base url where the app is running
-	 * @param identityId Id of the identity to regenerate API Token for
-	 * @param timeout The Timeout time to wait before converting the request to async
+	 * @param identityId     Id of the identity to regenerate API Token for
+	 * @param timeout        The Timeout time to wait before converting the request to async
 	 * @return IdentityResponse Gives the details about the Identity and the access priviliges
-	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
-	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout. 
+	 * @throws XooaApiException            It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
-	public boolean deleteIdentity(WebService webService, String calloutBaseUrl, String identityId, long timeout) throws XooaApiException, XooaRequestTimeoutException {
-		
+	public boolean deleteIdentity(WebService webService, String calloutBaseUrl, String identityId, long timeout)
+			throws XooaApiException, XooaRequestTimeoutException {
+
 		String url = calloutBaseUrl + "/identities/" + identityId + "?timeout=" + timeout;
-		
+
 		return deleteIdentity(webService, url, WebService.REQUEST_METHOD_DELETE, null);
 	}
-	
+
 	/**
-	 * Call the Identity API in async 
+	 * Call the Identity API in async
 	 * 
-	 * @param webService WebService object used to call the API
+	 * @param webService     WebService object used to call the API
 	 * @param calloutBaseUrl the base url where the app is running
-	 * @param identityId Id of the identity to regenerate API Token for
+	 * @param identityId     Id of the identity to regenerate API Token for
 	 * @return PendingTransactionResponse Gives the ResultId and ResultUrl for the transaction
 	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
 	 */
-	public PendingTransactionResponse deleteIdentityAsync(WebService webService, String calloutBaseUrl, String identityId) throws XooaApiException {
-		
+	public PendingTransactionResponse deleteIdentityAsync(WebService webService, String calloutBaseUrl,
+			String identityId) throws XooaApiException {
+
 		String url = calloutBaseUrl + "/identities/" + identityId + "?async=true";
-		
+
 		return callIdentityApiAsync(webService, url, WebService.REQUEST_METHOD_DELETE, null);
 	}
-	
+
 	/**
 	 * Call the Identity API
 	 * 
-	 * @param webService WebService object used to call the API
+	 * @param webService     WebService object used to call the API
 	 * @param calloutBaseUrl the base url where the app is running
 	 * @return IdentityResponse Gives the details about all the Identities and the access priviliges
-	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaApiException            It is thrown in case of any internal error or if the API returns any error.
 	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
-	public List<IdentityResponse> getIdentities(WebService webService, String calloutBaseUrl) throws XooaApiException, XooaRequestTimeoutException {
-		
+	public List<IdentityResponse> getIdentities(WebService webService, String calloutBaseUrl)
+			throws XooaApiException, XooaRequestTimeoutException {
+
 		try {
-			
+
 			String url = calloutBaseUrl + "/identities/";
-			
+
 			WebCalloutResponse response = webService.makeIdentityCall(url, WebService.REQUEST_METHOD_GET, null);
-			
+
 			if (response.getResponseCode() == 200) {
-				
+
 				List<IdentityResponse> identityResponseList = new ArrayList<>();
-				
+
 				try {
-					
+
 					JSONArray identitiesArray = new JSONArray(response.getResponseText());
-					
+
 					for (int i = 0; i < identitiesArray.length(); i++) {
-						
-						// For each identity, we parse the respective object to get the inner JsonArray for attributes
+
+						// For each identity, we parse the respective object to get the inner JsonArray
+						// for attributes
 						JSONObject identity = identitiesArray.optJSONObject(i);
-						
+
 						JSONArray attribuesArray = identity.optJSONArray("Attrs");
-						
+
 						List<Attributes> attributesList = new ArrayList<>();
-						
+
 						if (attribuesArray != null) {
-							
+
 							for (int j = 0; j < attribuesArray.length(); j++) {
-								
+
 								// Create a new object from the attribute value
-								Attributes attributes = new Gson().fromJson(attribuesArray.optJSONObject(j).toString(), Attributes.class);
-								
+								Attributes attributes = new Gson().fromJson(attribuesArray.optJSONObject(j).toString(),
+										Attributes.class);
+
 								attributesList.add(attributes);
 							}
 						}
-						
-						IdentityResponse identityResponse = new Gson().fromJson(String.valueOf(identitiesArray.optJSONObject(i)), IdentityResponse.class);
-						
+
+						IdentityResponse identityResponse = new Gson()
+								.fromJson(String.valueOf(identitiesArray.optJSONObject(i)), IdentityResponse.class);
+
 						identityResponse.setAttributes(attributesList);
-						
+
 						identityResponseList.add(identityResponse);
 					}
 				} catch (Exception e) {
-					
+
 					logger.error(e);
-					
-					// NOTE: This error is not thrown to the user of the lib since this is supposed to be handled here and not by the user
+
+					// NOTE: This error is not thrown to the user of the lib since this is supposed
+					// to be handled here and not by the user
 					XooaApiException apiException = new XooaApiException();
 					apiException.setErrorCode(0);
 					apiException.setErrorMessage(e.getMessage());
-					
+
 					throw apiException;
 				}
-				
+
 				return identityResponseList;
-				
+
 			} else if (response.getResponseCode() == 202) {
-				
+
 				throw new Gson().fromJson(response.getResponseText(), XooaRequestTimeoutException.class);
-				
+
 			} else {
-				
+
 				XooaApiException apiException = new XooaApiException();
 				apiException.setErrorCode(response.getResponseCode());
 				apiException.setErrorMessage(response.getResponseText());
-				
+
 				throw apiException;
 			}
 		} catch (XooaApiException xae) {
-			
+
 			throw xae;
-			
+
 		} catch (XooaRequestTimeoutException xrte) {
-			
+
 			throw xrte;
-			
+
 		} catch (Exception e) {
-			
+
 			XooaApiException apiException = new XooaApiException();
 			apiException.setErrorCode(0);
 			apiException.setErrorMessage(e.getMessage());
-			
+
 			throw apiException;
 		}
 	}
-	
+
 	/**
 	 * Process the response from the Identity API
 	 * 
-	 * @param webService WebService object used to call the API
-	 * @param url the base url where the app is running
+	 * @param webService    WebService object used to call the API
+	 * @param url           the base url where the app is running
 	 * @param requestMethod http method for the call
 	 * @param requestString the request body that needs to be sent
 	 * @return IdentityResponse Gives the details about the Identity and the access priviliges
-	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaApiException            It is thrown in case of any internal error or if the API returns any error.
 	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
-	private boolean deleteIdentity(WebService webService, String url, String requestMethod, String requestString) throws XooaApiException, XooaRequestTimeoutException {
-		
+	private boolean deleteIdentity(WebService webService, String url, String requestMethod, String requestString)
+			throws XooaApiException, XooaRequestTimeoutException {
+
 		try {
-			
+
 			WebCalloutResponse response = webService.makeIdentityCall(url, requestMethod, requestString);
-			
+
 			if (response.getResponseCode() == 200) {
-				
+
 				JSONObject responseJson = new JSONObject(response.getResponseText());
-				
+
 				return responseJson.getBoolean("deleted");
-				
+
 			} else if (response.getResponseCode() == 202) {
-				
+
 				throw new Gson().fromJson(response.getResponseText(), XooaRequestTimeoutException.class);
-				
+
 			} else {
-				
+
 				XooaApiException apiException = new XooaApiException();
 				apiException.setErrorCode(response.getResponseCode());
 				apiException.setErrorMessage(response.getResponseText());
-				
+
 				throw apiException;
 			}
 		} catch (XooaApiException xae) {
-			
+
 			throw xae;
-			
+
 		} catch (XooaRequestTimeoutException xrte) {
-			
+
 			throw xrte;
-			
+
 		} catch (Exception e) {
-			
+
 			XooaApiException apiException = new XooaApiException();
 			apiException.setErrorCode(0);
 			apiException.setErrorMessage(e.getMessage());
-			
+
 			throw apiException;
 		}
 	}
-	
+
 	/**
 	 * Process the response from the Identity API
 	 * 
-	 * @param webService WebService object used to call the API
-	 * @param url the base url where the app is running
+	 * @param webService    WebService object used to call the API
+	 * @param url           the base url where the app is running
 	 * @param requestMethod http method for the call
 	 * @param requestString the request body that needs to be sent
 	 * @return IdentityResponse Gives the details about the Identity and the access priviliges
-	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
+	 * @throws XooaApiException            It is thrown in case of any internal error or if the API returns any error.
 	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
-	private IdentityResponse callIdentityApi(WebService webService, String url, String requestMethod, String requestString) throws XooaApiException, XooaRequestTimeoutException {
-		
+	private IdentityResponse callIdentityApi(WebService webService, String url, String requestMethod,
+			String requestString) throws XooaApiException, XooaRequestTimeoutException {
+
 		try {
-			
+
 			WebCalloutResponse response = webService.makeIdentityCall(url, requestMethod, requestString);
-			
+
 			if (response.getResponseCode() == 200) {
-				
+
 				try {
-					
-					//We parse the response to get the JsonArray for attributes
+
+					// We parse the response to get the JsonArray for attributes
 					JSONObject jsonObject = new JSONObject(response.getResponseText());
-					
+
 					JSONArray jsonArray = jsonObject.optJSONArray("Attrs");
-					
+
 					List<Attributes> attributesList = new ArrayList<>();
-					
+
 					if (jsonArray != null) {
-						
+
 						for (int i = 0; i < jsonArray.length(); i++) {
-							
+
 							// Create a new object from the attribute value
 							Attributes attributes = new Gson().fromJson(jsonArray.optString(i), Attributes.class);
-							
+
 							attributesList.add(attributes);
 						}
 					}
-					
-					IdentityResponse identityResponse = new Gson().fromJson(response.getResponseText(), IdentityResponse.class);
-					
+
+					IdentityResponse identityResponse = new Gson().fromJson(response.getResponseText(),
+							IdentityResponse.class);
+
 					identityResponse.setAttributes(attributesList);
-					
+
 					return identityResponse;
-					
+
 				} catch (Exception e) {
-					
+
 					XooaApiException apiException = new XooaApiException();
-		            apiException.setErrorCode(0);
-		            apiException.setErrorMessage(e.getMessage());
-		            
-		            throw apiException;
-	        	}
+					apiException.setErrorCode(0);
+					apiException.setErrorMessage(e.getMessage());
+
+					throw apiException;
+				}
 			} else if (response.getResponseCode() == 202) {
-				
+
 				throw new Gson().fromJson(response.getResponseText(), XooaRequestTimeoutException.class);
-				
+
 			} else {
-				
+
 				XooaApiException apiException = new XooaApiException();
-	            apiException.setErrorCode(response.getResponseCode());
-	            apiException.setErrorMessage(response.getResponseText());
-	            
-	            throw apiException;
-	        }
+				apiException.setErrorCode(response.getResponseCode());
+				apiException.setErrorMessage(response.getResponseText());
+
+				throw apiException;
+			}
 		} catch (XooaApiException xae) {
-			
+
 			throw xae;
-			
+
 		} catch (XooaRequestTimeoutException xrte) {
-			
+
 			throw xrte;
-			
+
 		} catch (Exception e) {
-			
+
 			XooaApiException apiException = new XooaApiException();
-            apiException.setErrorCode(0);
-            apiException.setErrorMessage(e.getMessage());
-            
-            throw apiException;
-        }
+			apiException.setErrorCode(0);
+			apiException.setErrorMessage(e.getMessage());
+
+			throw apiException;
+		}
 	}
-	
+
 	/**
 	 * Process the response for async calls
 	 * 
-	 * @param webService WebService object used to call the API
-	 * @param url the base url where the app is running
+	 * @param webService    WebService object used to call the API
+	 * @param url           the base url where the app is running
 	 * @param requestMethod http method for the call
 	 * @param requestString the request body that needs to be sent
 	 * @return PendingTransactionResponse Gives the ResultId and ResultUrl for the transaction
 	 * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
 	 */
-	private PendingTransactionResponse callIdentityApiAsync(WebService webService, String url, String requestMethod, String requestString) throws XooaApiException {
-		
+	private PendingTransactionResponse callIdentityApiAsync(WebService webService, String url, String requestMethod,
+			String requestString) throws XooaApiException {
+
 		try {
-			
+
 			WebCalloutResponse response = webService.makeIdentityCall(url, requestMethod, requestString);
-			
-			
+
 			if (response.getResponseCode() == 202) {
-				
+
 				return new Gson().fromJson(response.getResponseText(), PendingTransactionResponse.class);
-				
+
 			} else {
-				
+
 				XooaApiException apiException = new XooaApiException();
-	            apiException.setErrorCode(response.getResponseCode());
-	            apiException.setErrorMessage(response.getResponseText());
-	            
-	            throw apiException;
+				apiException.setErrorCode(response.getResponseCode());
+				apiException.setErrorMessage(response.getResponseText());
+
+				throw apiException;
 			}
 		} catch (XooaApiException xae) {
-			 
+
 			throw xae;
-			 
+
 		} catch (Exception e) {
-			
+
 			XooaApiException apiException = new XooaApiException();
-            apiException.setErrorCode(0);
-            apiException.setErrorMessage(e.getMessage());
-            
-            throw apiException;
+			apiException.setErrorCode(0);
+			apiException.setErrorMessage(e.getMessage());
+
+			throw apiException;
 		}
-    }
+	}
 }

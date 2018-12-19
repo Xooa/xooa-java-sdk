@@ -34,7 +34,6 @@ public class InvokeResponse {
 	@SerializedName("payload")
 	private String payload;
 
-
 	public String getTransactionId() {
 
 		return transactionId;

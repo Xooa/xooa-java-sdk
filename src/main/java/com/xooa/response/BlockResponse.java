@@ -40,7 +40,6 @@ public class BlockResponse {
 	@SerializedName("blockNumber")
 	private long blockNumber;
 
-
 	public String getPreviousHash() {
 
 		return previousHash;

@@ -31,7 +31,6 @@ public class QueryResponse {
 	@SerializedName("payload")
 	private String payload;
 
-
 	public String getPayload() {
 
 		return payload;

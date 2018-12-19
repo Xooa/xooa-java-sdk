@@ -29,31 +29,30 @@ public class XooaRequestTimeoutException extends Exception {
 	private static final long serialVersionUID = -2762335665779877682L;
 
 	private String resultURL;
-    private String resultId;
+	private String resultId;
 
+	public String getResultUrl() {
 
-    public String getResultUrl() {
+		return resultURL;
+	}
 
-    	return resultURL;
-    }
+	public void setResultUrl(String resultUrl) {
 
-    public void setResultUrl(String resultUrl) {
+		this.resultURL = resultUrl;
+	}
 
-    	this.resultURL = resultUrl;
-    }
+	public String getResultId() {
 
-    public String getResultId() {
+		return resultId;
+	}
 
-    	return resultId;
-    }
+	public void setResultId(String resultId) {
 
-    public void setResultId(String resultId) {
+		this.resultId = resultId;
+	}
 
-    	this.resultId = resultId;
-    }
-
-    public void display() {
-    	System.out.println("Result Id - " + resultId);
-    	System.out.println("Result Url - " + resultURL);
-    }
+	public void display() {
+		System.out.println("Result Id - " + resultId);
+		System.out.println("Result Url - " + resultURL);
+	}
 }

@@ -30,31 +30,30 @@ public class XooaApiException extends Exception {
 	private static final long serialVersionUID = -1989271294313077374L;
 
 	private int errorCode;
-    private String errorMessage;
+	private String errorMessage;
 
+	public int getErrorCode() {
 
-    public int getErrorCode() {
+		return errorCode;
+	}
 
-    	return errorCode;
-    }
+	public void setErrorCode(int errorCode) {
 
-    public void setErrorCode(int errorCode) {
+		this.errorCode = errorCode;
+	}
 
-    	this.errorCode = errorCode;
-    }
+	public String getErrorMessage() {
 
-    public String getErrorMessage() {
+		return errorMessage;
+	}
 
-    	return errorMessage;
-    }
+	public void setErrorMessage(String errorMessage) {
 
-    public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
 
-    	this.errorMessage = errorMessage;
-    }
-
-    public void display() {
-    	System.out.println("Exception Code - " + errorCode);
-    	System.out.println("Exception Message - " + errorMessage);
-    }
+	public void display() {
+		System.out.println("Exception Code - " + errorCode);
+		System.out.println("Exception Message - " + errorMessage);
+	}
 }

@@ -22,7 +22,8 @@ import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Transaction Response received when a request to get Transaction details is done.
+ * Transaction Response received when a request to get Transaction details is
+ * done.
  *
  * @author kavi
  *
@@ -52,7 +53,6 @@ public class TransactionResponse {
 
 	@SerializedName("write_set")
 	private List<WriteSet> writeSet;
-
 
 	public String getTransactionId() {
 		return transactionId;
@@ -143,7 +143,6 @@ public class TransactionResponse {
 		}
 	}
 
-
 	static class ReadSet {
 
 		@SerializedName("chaincode")
@@ -178,7 +177,6 @@ public class TransactionResponse {
 		}
 	}
 
-
 	static class ReadSubSet {
 
 		@SerializedName("key")
@@ -210,7 +208,6 @@ public class TransactionResponse {
 		}
 	}
 
-
 	static class Version {
 
 		@SerializedName("block_num")
@@ -241,7 +238,6 @@ public class TransactionResponse {
 		}
 	}
 
-
 	static class WriteSet {
 
 		@SerializedName("chaincode")
@@ -249,7 +245,6 @@ public class TransactionResponse {
 
 		@SerializedName("set")
 		private List<WriteSubSet> set;
-
 
 		public String getChaincode() {
 			return chaincode;
@@ -277,7 +272,6 @@ public class TransactionResponse {
 		}
 	}
 
-
 	static class WriteSubSet {
 
 		@SerializedName("key")
@@ -288,7 +282,6 @@ public class TransactionResponse {
 
 		@SerializedName("is_delete")
 		private boolean isDelete;
-
 
 		public String getKey() {
 			return key;

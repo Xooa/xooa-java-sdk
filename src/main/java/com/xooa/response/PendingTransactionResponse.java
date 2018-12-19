@@ -21,7 +21,8 @@ package com.xooa.response;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Pending Transaction Response received when a call is made to the API in async mode.
+ * Pending Transaction Response received when a call is made to the API in async
+ * mode.
  *
  * @author kavi
  *
@@ -33,7 +34,6 @@ public class PendingTransactionResponse {
 
 	@SerializedName("resultId")
 	private String resultId;
-
 
 	public String getResultUrl() {
 
