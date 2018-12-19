@@ -24,18 +24,18 @@ public class XooaRequestTimeoutException extends Exception {
 	
 	private static final long serialVersionUID = -2762335665779877682L;
 	
-	private String resultUrl;
+	private String resultURL;
     private String resultId;
     
     
     public String getResultUrl() {
     	
-    	return resultUrl;
+    	return resultURL;
     }
     
     public void setResultUrl(String resultUrl) {
     	
-    	this.resultUrl = resultUrl;
+    	this.resultURL = resultUrl;
     }
     
     public String getResultId() {
@@ -50,6 +50,6 @@ public class XooaRequestTimeoutException extends Exception {
     
     public void display() {
     	System.out.println("Result Id - " + resultId);
-    	System.out.println("result Url - " + resultUrl);
+    	System.out.println("Result Url - " + resultURL);
     }
 }
