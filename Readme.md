@@ -8,6 +8,34 @@ This SDK refers to APIs available for Xooa platform. For more details, refer: <h
 
 The platform documentation is available at <https://docs.xooa.com>
 
+## Installation
+---
+
+There are two ways to install Xooa SDK in your project.
+
+You can either download the source code from [Git](https://github.com/Xooa/xooa-java-sdk) and run
+
+    $ mvn clean install
+    
+this will build the jar for xooa-java-sdk which you can then include in your project as an external jar.
+
+The other and easier way is to use a dependency management:
+
+You can add a dependency in maven as:
+```
+    <dependency>
+        <groupId>com.xooa</groupId>
+        <artifactId>xooa-java-sdk</artifactId>
+        <version>1.0.3</version>
+    </dependency>
+```
+
+You can include it in Gradle with:
+```
+    compile 'com.xooa:xooa-java-sdk:1.0.3'
+```
+    
+
 ## Usage
 ---
 ### [com.xooa.XooaClient](https://github.com/Xooa/xooa-java-sdk/blob/master/src/main/java/com/xooa/XooaClient.java)
