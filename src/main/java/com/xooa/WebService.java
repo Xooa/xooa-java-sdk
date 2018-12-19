@@ -32,6 +32,12 @@ import org.apache.logging.log4j.Logger;
 import com.xooa.exception.XooaApiException;
 import com.xooa.response.WebCalloutResponse;
 
+/**
+ * This is the internal class used to make actual API calls.
+ *
+ * @author kavi
+ *
+ */
 public class WebService {
 
 	public static final String REQUEST_METHOD_GET = "GET";
@@ -263,7 +269,7 @@ public class WebService {
             httpsConnection.setRequestProperty("Content-Type", "application/json");
             httpsConnection.setRequestProperty("Authorization", "bearer " + apiToken);
 
-            if (!(requestBody.equals("")) && !requestBody.equals(null)) {
+            if (!(requestBody.equals("")) && requestBody != null) {
 
             	logger.debug(requestBody);
 
@@ -278,7 +284,7 @@ public class WebService {
             String line;
             StringBuilder content = new StringBuilder();
 
-            while (!(line = inputReader.readLine()).equals(null)) {
+            while ((line = inputReader.readLine()) != null) {
 
             	content.append(line);
             	content.append(System.lineSeparator());
@@ -303,10 +309,14 @@ public class WebService {
         	throw apiException;
         } finally {
         	try {
-        		writeStream.close();
-        		inputReader.close();
+        		if (writeStream != null) {
+        			writeStream.close();
+        		}
+        		if (inputReader != null) {
+        			inputReader.close();
+        		}
         	} catch (IOException ioe) {
-
+        		logger.error("Ignorable - Exception closing the IO Streams");
         	}
         }
     }

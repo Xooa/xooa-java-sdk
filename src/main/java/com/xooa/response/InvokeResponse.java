@@ -20,6 +20,12 @@ package com.xooa.response;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Invoke Response received when an Invoke call is made to the API.
+ *
+ * @author kavi
+ *
+ */
 public class InvokeResponse {
 
 	@SerializedName("txId")

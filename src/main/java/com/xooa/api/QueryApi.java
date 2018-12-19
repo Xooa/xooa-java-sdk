@@ -28,7 +28,12 @@ import com.xooa.response.PendingTransactionResponse;
 import com.xooa.response.QueryResponse;
 import com.xooa.response.WebCalloutResponse;
 
-
+/**
+ * Query API internal class used to create query requests for the API.
+ *
+ * @author kavi
+ *
+ */
 public class QueryApi {
 	
 	/**

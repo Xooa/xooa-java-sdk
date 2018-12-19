@@ -20,7 +20,12 @@ package com.xooa.request;
 
 import com.google.gson.annotations.SerializedName;
 
-
+/**
+ * Attributes for the Identity.
+ *
+ * @author kavi
+ *
+ */
 public class Attributes {
 
 	@SerializedName("name")

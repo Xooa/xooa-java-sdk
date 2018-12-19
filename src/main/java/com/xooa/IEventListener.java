@@ -19,6 +19,12 @@ package com.xooa;
 
 import org.json.JSONObject;
 
+/**
+ * Event Listener interface needed to create a listener which is required to subscribe to events on the smart contract.
+ *
+ * @author kavi
+ *
+ */
 public interface IEventListener {
 
     void onConnected(String message);

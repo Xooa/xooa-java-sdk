@@ -25,7 +25,12 @@ import com.xooa.exception.XooaApiException;
 import com.xooa.exception.XooaRequestTimeoutException;
 import com.xooa.response.*;
 
-
+/**
+ * Blockchain API internal class used to create block requests for the API.
+ *
+ * @author kavi
+ *
+ */
 public class BlockchainApi {
 	
 	/**

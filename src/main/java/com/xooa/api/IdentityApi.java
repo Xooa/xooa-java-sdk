@@ -36,7 +36,12 @@ import com.xooa.response.IdentityResponse;
 import com.xooa.response.PendingTransactionResponse;
 import com.xooa.response.WebCalloutResponse;
 
-
+/**
+ * Identity API internal class used to create identity requests for the API.
+ *
+ * @author kavi
+ *
+ */
 public class IdentityApi {
 	
 	

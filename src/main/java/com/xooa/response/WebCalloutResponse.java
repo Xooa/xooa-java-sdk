@@ -18,6 +18,12 @@
 
 package com.xooa.response;
 
+/**
+ * Web Callout Response received from the Xooa Api. This contains the status code and the response body received in response.
+ *
+ * @author kavi
+ *
+ */
 public class WebCalloutResponse {
 
 	private int responseCode;

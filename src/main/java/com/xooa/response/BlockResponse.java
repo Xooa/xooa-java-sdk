@@ -20,6 +20,12 @@ package com.xooa.response;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Block Response received when a request is made to get block data from API.
+ *
+ * @author kavi
+ *
+ */
 public class BlockResponse {
 
 	@SerializedName("previous_hash")

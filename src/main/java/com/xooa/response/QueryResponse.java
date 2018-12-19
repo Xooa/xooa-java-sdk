@@ -20,6 +20,12 @@ package com.xooa.response;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Query Response received when a Query call is made to the API.
+ *
+ * @author kavi
+ *
+ */
 public class QueryResponse {
 
 	@SerializedName("payload")

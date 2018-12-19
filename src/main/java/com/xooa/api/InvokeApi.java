@@ -27,7 +27,12 @@ import com.xooa.response.InvokeResponse;
 import com.xooa.response.PendingTransactionResponse;
 import com.xooa.response.WebCalloutResponse;
 
-
+/**
+ * Invoke API internal class used to create invoke request for the API.
+ *
+ * @author kavi
+ *
+ */
 public class InvokeApi {
 	
 	/**

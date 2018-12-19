@@ -22,6 +22,12 @@ import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Identity Request needed to be submitted to enrollIdentity call on API.
+ *
+ * @author kavi
+ *
+ */
 public class IdentityRequest {
 
     @SerializedName("IdentityName")
@@ -34,7 +40,7 @@ public class IdentityRequest {
     private boolean canManageIdentities;
 
     @SerializedName("Attrs")
-    List<Attributes> attributes;
+    private List<Attributes> attributes;
 
 
     public String getIdentityName() {

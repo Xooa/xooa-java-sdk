@@ -23,7 +23,12 @@ import com.xooa.request.Attributes;
 
 import java.util.List;
 
-
+/**
+ * Identity Response received when a request is made to get identities details from API.
+ *
+ * @author kavi
+ *
+ */
 public class IdentityResponse {
 
 	@SerializedName("IdentityName")

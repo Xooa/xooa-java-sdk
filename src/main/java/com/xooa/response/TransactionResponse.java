@@ -21,6 +21,12 @@ import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Transaction Response received when a request to get Transaction details is done.
+ *
+ * @author kavi
+ *
+ */
 public class TransactionResponse {
 
 	@SerializedName("txid")

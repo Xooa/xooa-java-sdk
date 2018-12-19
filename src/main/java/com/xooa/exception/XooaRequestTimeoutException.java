@@ -18,6 +18,12 @@
 
 package com.xooa.exception;
 
+/**
+ * Xooa Request Timeout Exception received when a synchronous call to the API times out and results in a pending response.
+ *
+ * @author kavi
+ *
+ */
 public class XooaRequestTimeoutException extends Exception {
 
 	private static final long serialVersionUID = -2762335665779877682L;

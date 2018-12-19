@@ -40,7 +40,12 @@ import com.xooa.response.QueryResponse;
 import com.xooa.response.TransactionResponse;
 import com.xooa.response.WebCalloutResponse;
 
-
+/**
+ * Result API internal class used to create result requests for the API.
+ * 
+ * @author kavi
+ *
+ */
 public class ResultApi {
 	
 	static Logger logger = LogManager.getLogger(ResultApi.class.getName());
