@@ -1,6 +1,6 @@
 # Xooa Java SDK
 
-The official Xooa SDK for Java to connect with the Xooa Paas.
+The official Xooa SDK for Java to connect with the Xooa Blockchain PaaS.
 
 Xooa (pronounced ZUU-ah) is dedicated to making blockchain easy. Focus on business problems, not blockchain problems.
 
@@ -17,7 +17,7 @@ You can either download the source code from [Git](https://github.com/Xooa/xooa-
 
     $ mvn clean install
     
-this will build the jar for xooa-java-sdk which you can then include in your project as an external jar.
+this will build the jar for xooa-java-sdk-VERSION-jar-with-dependencies which you can then include in your project as an external jar.
 
 The other and easier way is to use a dependency management:
 
@@ -32,7 +32,7 @@ You can add a dependency in maven as:
 
 You can include it in Gradle with:
 ```
-    compile 'com.xooa:xooa-java-sdk:1.0.3'
+    compile 'com.xooa:xooa-java-sdk:VERSION'
 ```
     
 

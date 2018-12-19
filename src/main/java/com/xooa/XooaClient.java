@@ -1,17 +1,17 @@
 /**
  * Java SDK for Xooa
- * 
+ *
  * Copyright 2018 Xooa
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at:
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
  * for the specific language governing permissions and limitations under the License.
- * 
+ *
  * @author Vishal Mullur
  * @author Kavi Sarna
  */
@@ -48,61 +48,68 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
+/**
+ * Base class to connect with the Xooa Blockchain PaaS.
+ * This class provides all the methods exposed by the SDK.
+ *
+ * @author kavi
+ *
+ */
 public class XooaClient {
-	
+
 	private static Logger logger = LogManager.getLogger(XooaClient.class.getName());
-	
+
 	private String apiToken;
     private String appUrl = "https://api.xooa.com/api/v1";
-    
+
     private WebService webService;
     private IEventListener iEventListener;
     private Socket socket;
-    
-    
+
+
     // -------- GETTERS AND SETTERS FOR CLASS VARIABLES ---------
     public void setApiToken(String apiToken) {
     	this.apiToken = apiToken;
-    	
+
     	setWebService(new WebService(apiToken));
     }
-    
+
     public String getApiToken() {
     	return apiToken;
     }
-    
+
     public void setAppUrl(String appUrl) {
     	this.appUrl = appUrl;
     }
-    
+
     public String getAppUrl() {
     	return appUrl;
     }
-    
+
     public void setWebService(WebService webService) {
     	this.webService = webService;
     }
-    
-    
+
+
     // -------- CLASS CONSTRUCTORS ---------
-    
+
     // Default constructor
     public XooaClient() {
-    	
+
     }
-    
+
     /**
      * Constructor to get an instance of XooaClient
      * 
      * @param apiToken API Token for the app to connect to.
      */
     public XooaClient(String apiToken) {
-    	
+
     	this.apiToken = apiToken;
-    	
+
     	setWebService(new WebService(apiToken));
     }
-    
+
     /**
      * Constructor to get an instance of XooaClient
      * 
@@ -110,13 +117,13 @@ public class XooaClient {
      * @param apiToken API Token for the app to connect to
      */
     public XooaClient(String apiToken, String appUrl) {
-    	
+
     	this.appUrl = appUrl;
     	this.apiToken = apiToken;
-    	
+
     	setWebService(new WebService(apiToken));
     }
-    
+
     /**
      * Constructor to get an instance of XooaClient
      *     
@@ -124,17 +131,17 @@ public class XooaClient {
      * @param eventListener Event Listener Object to listen to events on Xooa.
      */
     public XooaClient(String apiToken, IEventListener eventListener) {
-    	
+
     	this.apiToken = apiToken;
         this.iEventListener = eventListener;
-        
+
         // Creates a new instance of webservice class and sets it using the setter method
         setWebService(new WebService(apiToken));
     }
-    
+
     
     // -------- PUBLIC CLASS METHODS ---------
-    
+
     /**
      * To validate if the API Token and App Url are valid and point to an existing App in xooa
      * 
@@ -142,57 +149,57 @@ public class XooaClient {
      * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
      */
     public boolean isValid() throws XooaApiException {
-    	
+
     	WebCalloutResponse response = webService.validateDetails(appUrl);
-    	
+
     	if (response.getResponseCode() != 200) {
-    		
+
     		XooaApiException apiException = new XooaApiException();
     		apiException.setErrorCode(response.getResponseCode());
     		apiException.setErrorMessage(response.getResponseText());
-    		
+
     		logger.error(apiException);
-    		
+
     		throw apiException;
-    		
+
     	} else {
-    		
+
     		IdentityResponse identityResponse = new Gson().fromJson(response.getResponseText(), IdentityResponse.class);
-    		
+
     		if (identityResponse.getId() != null) {
-    			
+
     			return true;
-    			
+
     		} else {
-    			
+
     			return false;
     		}
     	}
     }
-    
+
     /**
      * Subscribe to all the events that take placce on the Xooa platform
      */
     public void subscribe() {
-    	
+
     	initSocketConnection();
     }
-    
+
     /**
      * Unsubscribe to events from Xooa. Disconnects the connection with Xooa.
      */
     public void unsubscribe() {
-    	
+
     	if (socket.connected()) {
-    		
+
     		socket.disconnect();
     	}
     }
-    
-    
-    
+
+
+
     // -------- INVOKE METHODS ---------
-    
+
     /**
      * Invoke Submit blockchain transaction
      * The Invoke API End Point is used for submitting transaction for processing by the blockchain Smart Contract app.
@@ -211,10 +218,10 @@ public class XooaClient {
      * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public InvokeResponse invoke(String functionName, String[] args) throws XooaApiException, XooaRequestTimeoutException {
-    	
+
     	return new InvokeApi().invoke(webService, appUrl, functionName, args);
     }
-    
+
     /**
      * Invoke Submit blockchain transaction
      * The Invoke API End Point is used for submitting transaction for processing by the blockchain Smart Contract app.
@@ -234,10 +241,10 @@ public class XooaClient {
      * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public InvokeResponse invoke(String functionName, String[] args, long timeout) throws XooaApiException, XooaRequestTimeoutException {
-    	
+
     	return new InvokeApi().invoke(webService, appUrl, functionName, args, timeout);
     }
-    
+
     /**
      * Invoke Submit blockchain transaction
      * The Invoke API End Point is used for submitting transaction for processing by the blockchain Smart Contract app.
@@ -255,13 +262,13 @@ public class XooaClient {
      * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
      */
     public PendingTransactionResponse invokeAsync(String functionName, String[] args) throws XooaApiException {
-    	
+
     	return new InvokeApi().invokeAsync(webService, appUrl, functionName, args);
     }
-    
-    
+
+
     // -------- QUERY METHODS ---------
-    
+
     /**
      * Query - Query Blockchain data
      * The query API End Point is used for querying blockchain state.
@@ -280,10 +287,10 @@ public class XooaClient {
      * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public QueryResponse query(String functionName, String[] args) throws XooaApiException, XooaRequestTimeoutException {
-    	
+
     	return new QueryApi().query(webService, appUrl, functionName, args);
     }
-    
+
     /**
      * Query - Query Blockchain data
      * The query API End Point is used for querying blockchain state.
@@ -303,10 +310,10 @@ public class XooaClient {
      * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public QueryResponse query(String functionName, String[] args, long timeout) throws XooaApiException, XooaRequestTimeoutException {
-    	
+
     	return new QueryApi().query(webService, appUrl, functionName, args, timeout);
     }
-    
+
     /**
      * Query - Query Blockchain data
      * The query API End Point is used for querying blockchain state.
@@ -324,13 +331,13 @@ public class XooaClient {
      * @throws XooaApiException It is thrown in case of any internal error or if the API returns any error.
      */
     public PendingTransactionResponse queryAsync(String functionName, String[] args) throws XooaApiException {
-    	
+
     	return new QueryApi().queryAsync(webService, appUrl, functionName, args);
     }
-    
-    
+
+
     // -------- IDENTITY METHODS ---------
-    
+
     /**
      * Returns the current Identity the API Token points to in the app
      * 
@@ -339,10 +346,10 @@ public class XooaClient {
      * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
      */
     public IdentityResponse getCurrentIdentity() throws XooaApiException, XooaRequestTimeoutException {
-    	
+
     	return new IdentityApi().getCurrentIdentity(webService, appUrl);
     }
-    
+
     /**
      * Get all identities from the identity registry
      * Required permission: manage identities (canManageIdentities=true)
