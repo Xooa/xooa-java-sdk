@@ -38,33 +38,127 @@ import com.xooa.response.WebCalloutResponse;
 public class QueryApiTest {
 	
 	@Test
-	public void testQuery() throws JSONException, XooaApiException {
+	public void testQuery() throws JSONException, XooaApiException, XooaRequestTimeoutException {
+		
+		String res = "{\"payload\":{\"result\":[{\"key\": \"a\", \"value\": \"c\"}], \"errors\": []}}";
+		
+		WebCalloutResponse response = new WebCalloutResponse();
+		response.setResponseText(res);
+		response.setResponseCode(200);
+		
+		String[] args = {"args1"};
+		
+		WebService webService = mock(WebService.class);
+		
+		when(webService.makeQueryCall("https://api.xooa.com/api/v1/query/get", args)).thenReturn(response);
+		
+		XooaClient xooaClient = new XooaClient();
+		xooaClient.setWebService(webService);
+		
+		QueryResponse query = xooaClient.query("get", args);
+		
+		assertEquals("{\"result\":[{\"value\":\"c\",\"key\":\"a\"}],\"errors\":[]}", query.getPayload());
+	}
+	
+	@Test
+	public void testQueryTimeout() throws JSONException, XooaApiException, XooaRequestTimeoutException {
+		
+		String res = "{\"payload\":{\"result\":[{\"key\": \"a\", \"value\": \"c\"}], \"errors\": []}}";
+		
+		WebCalloutResponse response = new WebCalloutResponse();
+		response.setResponseText(res);
+		response.setResponseCode(200);
+		
+		String[] args = {"args1"};
+		
+		WebService webService = mock(WebService.class);
+		
+		when(webService.makeQueryCall("https://api.xooa.com/api/v1/query/get?timeout=4000", args)).thenReturn(response);
+		
+		XooaClient xooaClient = new XooaClient();
+		xooaClient.setWebService(webService);
+		
+		QueryResponse query = xooaClient.query("get", args, 4000);
+		
+		assertEquals("{\"result\":[{\"value\":\"c\",\"key\":\"a\"}],\"errors\":[]}", query.getPayload());
+	}
+	
+	@Test
+	public void testQuery_RequestTimeout() throws JSONException, XooaApiException, XooaRequestTimeoutException {
 		
 		try {
-			
-			String res = "{\"payload\":{\"result\":[{\"key\": \"a\", \"value\": \"c\"}], \"errors\": []}}";
-			
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("resultURL", "3df933d87beba75ceebaad7c95e28876acbd783b94e1437d6901c329443dbba3");
+			jsonObject.put("resultId", "12345");
+		    
 			WebCalloutResponse response = new WebCalloutResponse();
-	        response.setResponseText(res);
-	        response.setResponseCode(200);
-	        
-	        String[] args = {"args1"};
-	        
-	        WebService webService = mock(WebService.class);
-	        
-	        when(webService.makeQueryCall("https://api.xooa.com/api/v1/query/get", args)).thenReturn(response);
-	        
-	        XooaClient xooaClient = new XooaClient();
-	        xooaClient.setWebService(webService);
-	        
-	        QueryResponse query = xooaClient.query("get", args);
-	        
-	        assertEquals("{\"result\":[{\"value\":\"c\",\"key\":\"a\"}],\"errors\":[]}", query.getPayload());
-	        
-		} catch (XooaRequestTimeoutException xrte) {
+		    response.setResponseText(jsonObject.toString());
+		    response.setResponseCode(202);
 			
-			assertNotNull(xrte.getResultId());
-			assertNotNull(xrte.getResultUrl());
+			String[] args = {"args1"};
+			
+			WebService webService = mock(WebService.class);
+			
+			when(webService.makeQueryCall("https://api.xooa.com/api/v1/query/get?timeout=4000", args)).thenReturn(response);
+			
+			XooaClient xooaClient = new XooaClient();
+			xooaClient.setWebService(webService);
+			
+			xooaClient.query("get", args, 4000);
+			
+		} catch (XooaRequestTimeoutException e) {
+			
+			assertEquals("3df933d87beba75ceebaad7c95e28876acbd783b94e1437d6901c329443dbba3", e.getResultUrl());
+		    assertEquals("12345", e.getResultId());
+		}
+	}
+	
+	@Test
+	public void testQuery_APIException() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+		    WebCalloutResponse response = new WebCalloutResponse();
+		    response.setResponseText("Exception");
+		    response.setResponseCode(400);
+			
+			String[] args = {"args1"};
+			
+			WebService webService = mock(WebService.class);
+			
+			when(webService.makeQueryCall("https://api.xooa.com/api/v1/query/get?timeout=4000", args)).thenReturn(response);
+			
+			XooaClient xooaClient = new XooaClient();
+			xooaClient.setWebService(webService);
+			
+			xooaClient.query("get", args, 4000);
+			
+		} catch (XooaApiException e) {
+			
+			assertEquals("Exception", e.getErrorMessage());
+		    assertEquals(400, e.getErrorCode());
+		}
+	}
+	
+	@Test
+	public void testQuery_Exception() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+		    NullPointerException exception = new NullPointerException();
+			
+			String[] args = {"args1"};
+			
+			WebService webService = mock(WebService.class);
+			
+			when(webService.makeQueryCall("https://api.xooa.com/api/v1/query/get?timeout=4000", args)).thenThrow(exception);
+			
+			XooaClient xooaClient = new XooaClient();
+			xooaClient.setWebService(webService);
+			
+			xooaClient.query("get", args, 4000);
+			
+		} catch (XooaApiException e) {
+			
+			assertNotNull(e);
 		}
 	}
 	
@@ -94,6 +188,54 @@ public class QueryApiTest {
 		
 		assertNotNull(query.getResultId());
 		assertNotNull(query.getResultUrl());
+	}
+	
+	@Test
+	public void testQueryAsync_APIException() throws JSONException, XooaRequestTimeoutException {
 		
+		try {
+		    WebCalloutResponse response = new WebCalloutResponse();
+		    response.setResponseText("Exception");
+		    response.setResponseCode(400);
+			
+			String[] args = {"args1"};
+			
+			WebService webService = mock(WebService.class);
+			
+			when(webService.makeQueryCall("https://api.xooa.com/api/v1/query/get?async=true", args)).thenReturn(response);
+			
+			XooaClient xooaClient = new XooaClient();
+			xooaClient.setWebService(webService);
+			
+			xooaClient.queryAsync("get", args);
+			
+		} catch (XooaApiException e) {
+			
+			assertEquals("Exception", e.getErrorMessage());
+		    assertEquals(400, e.getErrorCode());
+		}
+	}
+	
+	@Test
+	public void testQueryAsync_Exception() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+		    NullPointerException exception = new NullPointerException();
+			
+			String[] args = {"args1"};
+			
+			WebService webService = mock(WebService.class);
+			
+			when(webService.makeQueryCall("https://api.xooa.com/api/v1/query/get?async=true", args)).thenThrow(exception);
+			
+			XooaClient xooaClient = new XooaClient();
+			xooaClient.setWebService(webService);
+			
+			xooaClient.queryAsync("get", args);
+			
+		} catch (XooaApiException e) {
+			
+			assertNotNull(e);
+		}
 	}
 }

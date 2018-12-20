@@ -19,11 +19,13 @@ package com.xooa.test.api;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.withSettings;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.Test;
 
 import com.xooa.WebService;
@@ -72,14 +74,170 @@ public class ResultApiTest {
 	}
 	
 	@Test
-	public void testGetResultForQuery() throws JSONException, XooaApiException {
+	public void testGetResultForInvoke_RequestTimeout() throws JSONException, XooaApiException {
 		
 		try {
 			
-			String resp = "{\"requestType\": \"query\",\"result\":{\"payload\":{\"result\":[{\"key\": \"a\",\"value\":\"c\"}],\"errors\":[]}}}";
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("resultURL", "Xooa");
+	        jsonObject.put("resultId", "xooa");
+	        
+			WebCalloutResponse response = new WebCalloutResponse();
+	        response.setResponseText(jsonObject.toString());
+	        response.setResponseCode(202);
+	        
+	        WebService webService = mock(WebService.class);
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c180", "GET")).thenReturn(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForInvoke("0af1fa06-5639-440a-987f-f7ac2587c180");
+	        
+		} catch (XooaRequestTimeoutException xrte) {
+			
+			assertEquals("xooa", xrte.getResultId());
+			assertEquals("Xooa", xrte.getResultUrl());
+		}
+	}
+	
+	@Test
+	public void testGetResultForInvoke_APIException() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
 			
 			WebCalloutResponse response = new WebCalloutResponse();
-	        response.setResponseText(resp);
+	        response.setResponseText("Exception");
+	        response.setResponseCode(402);
+	        
+	        WebService webService = mock(WebService.class);
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c180", "GET")).thenReturn(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForInvoke("0af1fa06-5639-440a-987f-f7ac2587c180");
+	        
+		} catch (XooaApiException xrte) {
+			
+			assertEquals("Exception", xrte.getErrorMessage());
+			assertEquals(402, xrte.getErrorCode());
+		}
+	}
+	
+	@Test
+	public void testGetResultForInvoke_Exception() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+			
+			NullPointerException response = new NullPointerException();
+	        
+	        WebService webService = mock(WebService.class);
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c180", "GET")).thenThrow(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForInvoke("0af1fa06-5639-440a-987f-f7ac2587c180");
+	        
+		} catch (XooaApiException xrte) {
+			
+			assertNotNull(xrte);
+		}
+	}
+	
+	@Test
+	public void testGetResultForInvoke_ParseException() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+			
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("resultURL", "Xooa");
+	        jsonObject.put("resultId", "xooa");
+	        
+			WebCalloutResponse response = new WebCalloutResponse();
+	        response.setResponseText("{," + jsonObject.toString());
+	        response.setResponseCode(200);
+	        
+	        WebService webService = mock(WebService.class);
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c180", "GET")).thenReturn(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForInvoke("0af1fa06-5639-440a-987f-f7ac2587c180");
+	        
+		} catch (XooaApiException xrte) {
+			
+			assertNotNull(xrte);
+		}
+	}
+	
+	@Test
+	public void testGetResultForQuery() throws JSONException, XooaApiException, XooaRequestTimeoutException {
+		
+		String resp = "{\"requestType\": \"query\",\"result\":{\"payload\":{\"result\":[{\"key\": \"a\",\"value\":\"c\"}],\"errors\":[]}}}";
+			
+		WebCalloutResponse response = new WebCalloutResponse();
+	    response.setResponseText(resp);
+	    response.setResponseCode(200);
+	        
+	    WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	    when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c181", "GET")).thenReturn(response);
+	        
+	    XooaClient xooaClient = new XooaClient();
+	    xooaClient.setWebService(webService);
+	        
+	    QueryResponse query = xooaClient.getResultForQuery("0af1fa06-5639-440a-987f-f7ac2587c181");
+	        
+	    assertEquals("{\"payload\":{\"result\":[{\"value\":\"c\",\"key\":\"a\"}],\"errors\":[]}}", query.getPayload());
+	}
+	
+	@Test
+	public void testGetResultForQuery_RequestTimeout() throws JSONException, XooaApiException {
+		
+		try {
+			
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("resultURL", "Xooa");
+	        jsonObject.put("resultId", "xooa");
+	        
+			WebCalloutResponse response = new WebCalloutResponse();
+	        response.setResponseText(jsonObject.toString());
+	        response.setResponseCode(202);
+	        
+	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c181", "GET")).thenReturn(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForQuery("0af1fa06-5639-440a-987f-f7ac2587c181");
+	        
+		} catch (XooaRequestTimeoutException xrte) {
+			
+			assertEquals("xooa", xrte.getResultId());
+			assertEquals("Xooa", xrte.getResultUrl());
+		}
+	}
+	
+	@Test
+	public void testGetResultForQuery_ParseException() throws JSONException, XooaRequestTimeoutException  {
+		
+		try {
+			
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("resultURL", "Xooa");
+	        jsonObject.put("resultId", "xooa");
+	        
+			WebCalloutResponse response = new WebCalloutResponse();
+	        response.setResponseText("{," + jsonObject.toString());
 	        response.setResponseCode(200);
 	        
 	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
@@ -89,23 +247,65 @@ public class ResultApiTest {
 	        XooaClient xooaClient = new XooaClient();
 	        xooaClient.setWebService(webService);
 	        
-	        QueryResponse query = xooaClient.getResultForQuery("0af1fa06-5639-440a-987f-f7ac2587c181");
+	        xooaClient.getResultForQuery("0af1fa06-5639-440a-987f-f7ac2587c181");
 	        
-	        assertEquals("{\"payload\":{\"result\":[{\"value\":\"c\",\"key\":\"a\"}],\"errors\":[]}}", query.getPayload());
-	        
-		} catch (XooaRequestTimeoutException xrte) {
+		} catch (XooaApiException xrte) {
 			
-			assertNotNull(xrte.getResultId());
-			assertNotNull(xrte.getResultUrl());
+			assertNotNull(xrte);
 		}
 	}
 	
 	@Test
-	public void testGetResultForIdentity() throws JSONException, XooaApiException {
+	public void testGetResultForQuery_APIException() throws JSONException, XooaRequestTimeoutException  {
 		
 		try {
 			
-			String res = "{\n" + 
+			WebCalloutResponse response = new WebCalloutResponse();
+	        response.setResponseText("Exception");
+	        response.setResponseCode(402);
+	        
+	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c181", "GET")).thenReturn(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForQuery("0af1fa06-5639-440a-987f-f7ac2587c181");
+	        
+		} catch (XooaApiException xrte) {
+			
+			assertEquals("Exception", xrte.getErrorMessage());
+			assertEquals(402, xrte.getErrorCode());
+		}
+	}
+	
+	@Test
+	public void testGetResultForQuery_Exception() throws JSONException, XooaRequestTimeoutException  {
+		
+		try {
+			
+			NullPointerException response = new NullPointerException();
+			
+	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c181", "GET")).thenThrow(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForQuery("0af1fa06-5639-440a-987f-f7ac2587c181");
+	        
+		} catch (XooaApiException xrte) {
+			
+			assertNotNull(xrte);
+		}
+	}
+	
+	@Test
+	public void testGetResultForIdentity() throws JSONException, XooaApiException, XooaRequestTimeoutException {
+		
+		String res = "{\n" + 
 					"  \"requestType\": \"identity\",\n" + 
 					"  \"result\": {\n" + 
 					"    \"Id\": \"74bb91b5-bb2a-493e-b2a1-bbc312fae5f4\",\n" + 
@@ -127,8 +327,66 @@ public class ResultApiTest {
 					"}";
 			
 			
+		WebCalloutResponse response = new WebCalloutResponse();
+	    response.setResponseText(res);
+	    response.setResponseCode(200);
+	        
+	    WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	    when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c182", "GET")).thenReturn(response);
+	        
+	    XooaClient xooaClient = new XooaClient();
+	    xooaClient.setWebService(webService);
+	        
+	    IdentityResponse identity = xooaClient.getResultForIdentity("0af1fa06-5639-440a-987f-f7ac2587c182");
+	        
+	    assertEquals("string", identity.getIdentityName());
+	    assertEquals("74bb91b5-bb2a-493e-b2a1-bbc312fae5f4", identity.getId());
+	    assertEquals("kavixooatvw2s9e27", identity.getAppId());
+	    assertEquals("r", identity.getAccessType());
+	    assertEquals(true, identity.isCanManageIdentities());
+	}
+	
+	@Test
+	public void testGetResultForIdentity_RequestTimeout() throws JSONException, XooaApiException {
+		
+		try {
+			
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("resultURL", "Xooa");
+	        jsonObject.put("resultId", "xooa");
+	        
 			WebCalloutResponse response = new WebCalloutResponse();
-	        response.setResponseText(res);
+	        response.setResponseText(jsonObject.toString());
+	        response.setResponseCode(202);
+	        
+	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c182", "GET")).thenReturn(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForIdentity("0af1fa06-5639-440a-987f-f7ac2587c182");
+	        
+		} catch (XooaRequestTimeoutException xrte) {
+			
+			assertEquals("xooa",xrte.getResultId());
+			assertEquals("Xooa", xrte.getResultUrl());
+		}
+	}
+	
+	@Test
+	public void testGetResultForIdentity_ParseException() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+			
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("resultURL", "Xooa");
+	        jsonObject.put("resultId", "xooa");
+	        
+			WebCalloutResponse response = new WebCalloutResponse();
+	        response.setResponseText("{," + jsonObject.toString());
 	        response.setResponseCode(200);
 	        
 	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
@@ -138,19 +396,58 @@ public class ResultApiTest {
 	        XooaClient xooaClient = new XooaClient();
 	        xooaClient.setWebService(webService);
 	        
-	        IdentityResponse identity = xooaClient.getResultForIdentity("0af1fa06-5639-440a-987f-f7ac2587c182");
+	        xooaClient.getResultForIdentity("0af1fa06-5639-440a-987f-f7ac2587c182");
 	        
-	        assertEquals("string", identity.getIdentityName());
-	        assertEquals("74bb91b5-bb2a-493e-b2a1-bbc312fae5f4", identity.getId());
-	        assertEquals("kavixooatvw2s9e27", identity.getAppId());
-	        assertEquals("r", identity.getAccessType());
-	        assertEquals(true, identity.isCanManageIdentities());
-	        
-	        
-		} catch (XooaRequestTimeoutException xrte) {
+		} catch (XooaApiException xrte) {
 			
-			assertNotNull(xrte.getResultId());
-			assertNotNull(xrte.getResultUrl());
+			assertNotNull(xrte);
+		}
+	}
+	
+	@Test
+	public void testGetResultForIdentity_APIException() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+			
+			WebCalloutResponse response = new WebCalloutResponse();
+	        response.setResponseText("Exception");
+	        response.setResponseCode(300);
+	        
+	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c182", "GET")).thenReturn(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForIdentity("0af1fa06-5639-440a-987f-f7ac2587c182");
+	        
+		} catch (XooaApiException xrte) {
+			
+			assertEquals("Exception",xrte.getErrorMessage());
+			assertEquals(300, xrte.getErrorCode());
+		}
+	}
+	
+	@Test
+	public void testGetResultForIdentity_Exception() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+			
+			NullPointerException response = new NullPointerException();
+	        
+	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c182", "GET")).thenThrow(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForIdentity("0af1fa06-5639-440a-987f-f7ac2587c182");
+	        
+		} catch (XooaApiException xrte) {
+			
+			assertNotNull(xrte);
 		}
 	}
 	
@@ -192,11 +489,109 @@ public class ResultApiTest {
 	}
 	
 	@Test
-	public void testGetResultForBlockByNumber() throws JSONException, XooaApiException {
+	public void testGetResultForCurrentBlock_RequestTimeout() throws JSONException, XooaApiException {
 		
 		try {
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("resultURL", "Xooa");
+	        jsonObject.put("resultId", "xooa");
+	        
+			WebCalloutResponse response = new WebCalloutResponse();
+	        response.setResponseText(jsonObject.toString());
+	        response.setResponseCode(202);
+	        
+	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c183", "GET")).thenReturn(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForCurrentBlock("0af1fa06-5639-440a-987f-f7ac2587c183");
+	        
+		} catch (XooaRequestTimeoutException xrte) {
 			
-			String res = "{\n" + 
+			assertEquals("xooa", xrte.getResultId());
+			assertEquals("Xooa", xrte.getResultUrl());
+		}
+	}
+	
+	@Test
+	public void testGetResultForCurrentBlock_ParseException() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("resultURL", "Xooa");
+	        jsonObject.put("resultId", "xooa");
+	        
+			WebCalloutResponse response = new WebCalloutResponse();
+	        response.setResponseText("{," + jsonObject.toString());
+	        response.setResponseCode(200);
+	        
+	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c183", "GET")).thenReturn(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForCurrentBlock("0af1fa06-5639-440a-987f-f7ac2587c183");
+	        
+		} catch (XooaApiException xrte) {
+			
+			assertNotNull(xrte);
+		}
+	}
+	
+	@Test
+	public void testGetResultForCurrentBlock_APIException() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+			WebCalloutResponse response = new WebCalloutResponse();
+	        response.setResponseText("Exception");
+	        response.setResponseCode(402);
+	        
+	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c183", "GET")).thenReturn(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForCurrentBlock("0af1fa06-5639-440a-987f-f7ac2587c183");
+	        
+		} catch (XooaApiException xrte) {
+			
+			assertEquals("Exception", xrte.getErrorMessage());
+			assertEquals(402, xrte.getErrorCode());
+		}
+	}
+	
+	@Test
+	public void testGetResultForCurrentBlock_Exception() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+			NullPointerException response = new NullPointerException();
+	        
+	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c183", "GET")).thenThrow(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForCurrentBlock("0af1fa06-5639-440a-987f-f7ac2587c183");
+	        
+		} catch (XooaApiException xrte) {
+			
+			assertNotNull(xrte);
+		}
+	}
+	
+	@Test
+	public void testGetResultForBlockByNumber() throws JSONException, XooaApiException, XooaRequestTimeoutException {
+		
+		String res = "{\n" + 
 					"  \"requestType\": \"blockByNumber\",\n" + 
 					"  \"result\": {\n" + 
 					"    \"previous_hash\": \"8946410bd4a65ca7362883fc2a38024b7aaee5898ef8123fee756f4d990d7d8e\",\n" + 
@@ -206,8 +601,66 @@ public class ResultApiTest {
 					"  }\n" + 
 					"}";
 			
+		WebCalloutResponse response = new WebCalloutResponse();
+	    response.setResponseText(res);
+	    response.setResponseCode(200);
+	        
+	    WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	    when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c184", "GET")).thenReturn(response);
+	        
+	    XooaClient xooaClient = new XooaClient();
+	    xooaClient.setWebService(webService);
+	       
+	    BlockResponse blockResponse = xooaClient.getResultForBlockByNumber("0af1fa06-5639-440a-987f-f7ac2587c184");
+	        
+	    assertEquals("8946410bd4a65ca7362883fc2a38024b7aaee5898ef8123fee756f4d990d7d8e", blockResponse.getPreviousHash());
+	    assertEquals("e228d0a334ddade49d49dd6e9fbdacae9beaee10cbd85d96d1fa40826df46282", blockResponse.getDataHash());
+	    assertEquals(10, blockResponse.getBlockNumber());
+	    assertEquals(1, blockResponse.getNumberOfTransactions());
+	
+	}
+	
+	@Test
+	public void testGetResultForBlockByNumber_RequestTimeout() throws JSONException, XooaApiException {
+		
+		try {
+			
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("resultURL", "Xooa");
+	        jsonObject.put("resultId", "xooa");
+	        
 			WebCalloutResponse response = new WebCalloutResponse();
-	        response.setResponseText(res);
+	        response.setResponseText(jsonObject.toString());
+	        response.setResponseCode(202);
+	        
+	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c184", "GET")).thenReturn(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForBlockByNumber("0af1fa06-5639-440a-987f-f7ac2587c184");
+	        
+		} catch (XooaRequestTimeoutException xrte) {
+			
+			assertEquals("xooa", xrte.getResultId());
+			assertEquals("Xooa", xrte.getResultUrl());
+		}
+	}
+	
+	@Test
+	public void testGetResultForBlockByNumber_ParseException() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+			
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("resultURL", "Xooa");
+	        jsonObject.put("resultId", "xooa");
+	        
+			WebCalloutResponse response = new WebCalloutResponse();
+	        response.setResponseText("{," + jsonObject.toString());
 	        response.setResponseCode(200);
 	        
 	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
@@ -217,17 +670,58 @@ public class ResultApiTest {
 	        XooaClient xooaClient = new XooaClient();
 	        xooaClient.setWebService(webService);
 	        
-	        BlockResponse blockResponse = xooaClient.getResultForBlockByNumber("0af1fa06-5639-440a-987f-f7ac2587c184");
+	        xooaClient.getResultForBlockByNumber("0af1fa06-5639-440a-987f-f7ac2587c184");
 	        
-	        assertEquals("8946410bd4a65ca7362883fc2a38024b7aaee5898ef8123fee756f4d990d7d8e", blockResponse.getPreviousHash());
-	        assertEquals("e228d0a334ddade49d49dd6e9fbdacae9beaee10cbd85d96d1fa40826df46282", blockResponse.getDataHash());
-	        assertEquals(10, blockResponse.getBlockNumber());
-	        assertEquals(1, blockResponse.getNumberOfTransactions());
-	        
-		} catch (XooaRequestTimeoutException xrte) {
+		} catch (XooaApiException xrte) {
 			
-			assertNotNull(xrte.getResultId());
-			assertNotNull(xrte.getResultUrl());
+			assertNotNull(xrte);
+		}
+	}
+	
+	@Test
+	public void testGetResultForBlockByNumber_APIException() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+			
+			WebCalloutResponse response = new WebCalloutResponse();
+	        response.setResponseText("Exception");
+	        response.setResponseCode(400);
+	        
+	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c184", "GET")).thenReturn(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForBlockByNumber("0af1fa06-5639-440a-987f-f7ac2587c184");
+	        
+		} catch (XooaApiException xrte) {
+			
+			assertEquals("Exception", xrte.getErrorMessage());
+			assertEquals(400, xrte.getErrorCode());
+		}
+	}
+	
+	@Test
+	public void testGetResultForBlockByNumber_Exception() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+			
+			NullPointerException response = new NullPointerException();
+	        
+	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c184", "GET")).thenThrow(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForBlockByNumber("0af1fa06-5639-440a-987f-f7ac2587c184");
+	        
+		} catch (XooaApiException xrte) {
+			
+			assertNotNull(xrte);
 		}
 	}
 	
@@ -305,6 +799,245 @@ public class ResultApiTest {
 			
 			assertNotNull(xrte.getResultId());
 			assertNotNull(xrte.getResultUrl());
+		}
+	}
+	
+	@Test
+	public void testGetResultForTransaction_RequestTimeout() throws JSONException, XooaApiException {
+		
+		try {
+			
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("resultURL", "Xooa");
+	        jsonObject.put("resultId", "xooa");
+	        
+			WebCalloutResponse response = new WebCalloutResponse();
+	        response.setResponseText(jsonObject.toString());
+	        response.setResponseCode(202);
+	        
+	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c185", "GET")).thenReturn(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForTransaction("0af1fa06-5639-440a-987f-f7ac2587c185");
+	        
+		} catch (XooaRequestTimeoutException xrte) {
+			
+			assertEquals("xooa", xrte.getResultId());
+			assertEquals("Xooa", xrte.getResultUrl());
+		}
+	}
+	
+	@Test
+	public void testGetResultForTransaction_ParseException() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+			
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("resultURL", "Xooa");
+	        jsonObject.put("resultId", "xooa");
+	        
+			WebCalloutResponse response = new WebCalloutResponse();
+	        response.setResponseText("{;" + jsonObject.toString());
+	        response.setResponseCode(200);
+	        
+	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c185", "GET")).thenReturn(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForTransaction("0af1fa06-5639-440a-987f-f7ac2587c185");
+	        
+		} catch (XooaApiException xrte) {
+			
+			assertNotNull(xrte);
+		}
+	}
+	
+	@Test
+	public void testGetResultForTransaction_APIException() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+			
+			WebCalloutResponse response = new WebCalloutResponse();
+	        response.setResponseText("Exception");
+	        response.setResponseCode(400);
+	        
+	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c185", "GET")).thenReturn(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForTransaction("0af1fa06-5639-440a-987f-f7ac2587c185");
+	        
+		} catch (XooaApiException xrte) {
+			
+			assertEquals("Exception", xrte.getErrorMessage());
+			assertEquals(400, xrte.getErrorCode());
+		}
+	}
+	
+	@Test
+	public void testGetResultForTransaction_Exception() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+			
+			NullPointerException response = new NullPointerException();
+	        
+	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c185", "GET")).thenThrow(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForTransaction("0af1fa06-5639-440a-987f-f7ac2587c185");
+	        
+		} catch (XooaApiException xrte) {
+			
+			assertNotNull(xrte);
+		}
+	}
+	
+	@Test
+	public void testGetResultForDeleteIdentity() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+			
+			JSONObject object = new JSONObject();
+			object.put("deleted", true);
+			
+			JSONObject resp = new JSONObject();
+			resp.put("result", object);
+			
+			WebCalloutResponse response = new WebCalloutResponse();
+	        response.setResponseText(resp.toString());
+	        response.setResponseCode(200);
+	        
+	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c185", "GET")).thenReturn(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        boolean flag = xooaClient.getResultForIdentityDelete("0af1fa06-5639-440a-987f-f7ac2587c185");
+	        
+	        assertTrue(flag);
+	        
+		} catch (XooaApiException xrte) {
+			
+			assertEquals("Exception", xrte.getErrorMessage());
+			assertEquals(400, xrte.getErrorCode());
+		}
+	}
+	
+	
+	@Test
+	public void testGetResultForDeleteIdentity_RequestTimeout() throws JSONException, XooaApiException {
+		
+		try {
+			JSONObject object = new JSONObject();
+			object.put("resultURL", "Xooa");
+			object.put("resultId", "xooa");
+			
+			WebCalloutResponse response = new WebCalloutResponse();
+	        response.setResponseText(object.toString());
+	        response.setResponseCode(202);
+	        
+	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c185", "GET")).thenReturn(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForIdentityDelete("0af1fa06-5639-440a-987f-f7ac2587c185");
+	        
+		} catch (XooaRequestTimeoutException xrte) {
+			assertEquals("xooa", xrte.getResultId());
+			assertEquals("Xooa", xrte.getResultUrl());
+		}
+	}
+	
+	@Test
+	public void testGetResultForDeleteIdentity_ParseException() throws JSONException, XooaApiException {
+		
+		try {
+			JSONObject object = new JSONObject();
+			object.put("resultURL", "Xooa");
+			object.put("resultId", "xooa");
+			
+			WebCalloutResponse response = new WebCalloutResponse();
+	        response.setResponseText("{::" + object.toString());
+	        response.setResponseCode(200);
+	        
+	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c185", "GET")).thenReturn(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForIdentityDelete("0af1fa06-5639-440a-987f-f7ac2587c185");
+	        
+		} catch (XooaRequestTimeoutException xrte) {
+			
+			assertNotNull(xrte);
+		}
+	}
+	
+	@Test
+	public void testGetResultForDeleteIdentity_APIException() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+			
+			WebCalloutResponse response = new WebCalloutResponse();
+	        response.setResponseText("Exception");
+	        response.setResponseCode(400);
+	        
+	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c185", "GET")).thenReturn(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForIdentityDelete("0af1fa06-5639-440a-987f-f7ac2587c185");
+	        
+		} catch (XooaApiException xrte) {
+			
+			assertEquals("Exception", xrte.getErrorMessage());
+			assertEquals(400, xrte.getErrorCode());
+		}
+	}
+	
+	@Test
+	public void testGetResultForDeleteIdentity_Exception() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+			
+			NullPointerException response = new NullPointerException();
+	        
+	        WebService webService = mock(WebService.class, withSettings().useConstructor("example_api_token"));
+	        
+	        when(webService.makeResultCall("https://api.xooa.com/api/v1/results/0af1fa06-5639-440a-987f-f7ac2587c185", "GET")).thenThrow(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getResultForIdentityDelete("0af1fa06-5639-440a-987f-f7ac2587c185");
+	        
+		} catch (XooaApiException xrte) {
+			
+			assertNotNull(xrte);
 		}
 	}
 }

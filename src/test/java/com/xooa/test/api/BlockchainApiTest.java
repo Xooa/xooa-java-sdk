@@ -39,38 +39,109 @@ import com.xooa.response.WebCalloutResponse;
 public class BlockchainApiTest {
 	
 	@Test
-	public void TestGetCurrentBlock() throws JSONException, XooaApiException {
+	public void TestGetCurrentBlock() throws JSONException, XooaApiException, XooaRequestTimeoutException {
+		
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("currentBlockHash", "7de96d8c-182f-4de3-83f8-955eaaa88f1a");
+	    jsonObject.put("previousBlockHash", "7de96d8c-182f-4de3-83f8-955eaaa88f1a-vsjbdbcas-ddsafz");
+	    jsonObject.put("blockNumber", 20);
+	        
+	    WebCalloutResponse response = new WebCalloutResponse();
+	    response.setResponseText(jsonObject.toString());
+	    response.setResponseCode(200);
+	        
+	    WebService webService = mock(WebService.class);
+	        
+	    when(webService.makeBlockchainCall("https://api.xooa.com/api/v1/block/current", "GET")).thenReturn(response);
+	        
+	    String apiToken = "example_api_token";
+	        
+	    XooaClient xooaClient = new XooaClient(apiToken);
+	    xooaClient.setWebService(webService);
+	        
+	    CurrentBlockResponse currentBlock = xooaClient.getCurrentBlock();
+	        
+	    assertEquals(jsonObject.getString("currentBlockHash"), currentBlock.getCurrentBlockHash());
+	    assertEquals(jsonObject.getString("previousBlockHash"), currentBlock.getPreviousBlockHash());
+	    assertEquals(jsonObject.getLong("blockNumber"), currentBlock.getBlockNumber());
+	}
+	
+	@Test
+	public void TestGetCurrentBlock_RequestTimeout() throws JSONException, XooaApiException {
 		
 		try {
-			
 			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("currentBlockHash", "7de96d8c-182f-4de3-83f8-955eaaa88f1a");
-	        jsonObject.put("previousBlockHash", "7de96d8c-182f-4de3-83f8-955eaaa88f1a-vsjbdbcas-ddsafz");
-	        jsonObject.put("blockNumber", 20);
-	        
-	        WebCalloutResponse response = new WebCalloutResponse();
-	        response.setResponseText(jsonObject.toString());
-	        response.setResponseCode(200);
-	        
-	        WebService webService = mock(WebService.class);
-	        
-	        when(webService.makeBlockchainCall("https://api.xooa.com/api/v1/block/current", "GET")).thenReturn(response);
-	        
-	        String apiToken = "example_api_token";
-	        
-	        XooaClient xooaClient = new XooaClient(apiToken);
-	        xooaClient.setWebService(webService);
-	        
-	        CurrentBlockResponse currentBlock = xooaClient.getCurrentBlock();
-	        
-	        assertEquals(jsonObject.getString("currentBlockHash"), currentBlock.getCurrentBlockHash());
-	        assertEquals(jsonObject.getString("previousBlockHash"), currentBlock.getPreviousBlockHash());
-	        assertEquals(jsonObject.getLong("blockNumber"), currentBlock.getBlockNumber());
-	        
-		} catch (XooaRequestTimeoutException xrte) {
+			jsonObject.put("resultURL", "7de96d8c-182f-4de3-83f8-955eaaa88f1a");
+		    jsonObject.put("resultId", "7de96d8c-182f-4de3-83f8-955eaaa88f1a-vsjbdbcas-ddsafz");
+		        
+		    WebCalloutResponse response = new WebCalloutResponse();
+		    response.setResponseText(jsonObject.toString());
+		    response.setResponseCode(202);
+		        
+		    WebService webService = mock(WebService.class);
+		        
+		    when(webService.makeBlockchainCall("https://api.xooa.com/api/v1/block/current", "GET")).thenReturn(response);
+		        
+		    String apiToken = "example_api_token";
+		        
+		    XooaClient xooaClient = new XooaClient(apiToken);
+		    xooaClient.setWebService(webService);
+		        
+		    xooaClient.getCurrentBlock();
+		  
+		} catch (XooaRequestTimeoutException e) {
 			
-			assertNotNull(xrte.getResultId());
-			assertNotNull(xrte.getResultUrl());
+			assertEquals("7de96d8c-182f-4de3-83f8-955eaaa88f1a-vsjbdbcas-ddsafz", e.getResultId());
+			assertEquals("7de96d8c-182f-4de3-83f8-955eaaa88f1a", e.getResultUrl());
+		}
+	}
+	
+	@Test
+	public void TestGetCurrentBlock_APIException() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+			WebCalloutResponse response = new WebCalloutResponse();
+		    response.setResponseText("Exception");
+		    response.setResponseCode(402);
+		        
+		    WebService webService = mock(WebService.class);
+		        
+		    when(webService.makeBlockchainCall("https://api.xooa.com/api/v1/block/current", "GET")).thenReturn(response);
+		        
+		    String apiToken = "example_api_token";
+		        
+		    XooaClient xooaClient = new XooaClient(apiToken);
+		    xooaClient.setWebService(webService);
+		        
+		    xooaClient.getCurrentBlock();
+		  
+		} catch (XooaApiException e) {
+			
+			assertEquals("Exception", e.getErrorMessage());
+			assertEquals(402, e.getErrorCode());
+		}
+	}
+	
+	@Test
+	public void TestGetCurrentBlock_Exception() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+			NullPointerException response = new NullPointerException();
+			
+		    WebService webService = mock(WebService.class);
+		        
+		    when(webService.makeBlockchainCall("https://api.xooa.com/api/v1/block/current", "GET")).thenThrow(response);
+		        
+		    String apiToken = "example_api_token";
+		        
+		    XooaClient xooaClient = new XooaClient(apiToken);
+		    xooaClient.setWebService(webService);
+		        
+		    xooaClient.getCurrentBlock();
+		  
+		} catch (XooaApiException e) {
+			
+			assertNotNull(e);
 		}
 	}
 	
@@ -100,21 +171,91 @@ public class BlockchainApiTest {
 	    
 	}
 	
+	@Test
+	public void TestGetCurrentBlockAsync_APIException() throws JSONException, XooaApiException {
+		
+		try {
+			WebCalloutResponse response = new WebCalloutResponse();
+		    response.setResponseText("Exception");
+		    response.setResponseCode(400);
+		    
+		    WebService webService = mock(WebService.class);
+		    
+		    when(webService.makeBlockchainCall("https://api.xooa.com/api/v1/block/current/?async=true", "GET")).thenReturn(response);
+		    
+		    XooaClient xooaClient = new XooaClient();
+		    xooaClient.setWebService(webService);
+		    
+		    xooaClient.getCurrentBlockAsync();
+		    
+		} catch (XooaApiException e) {
+			
+			assertEquals("Exception", e.getErrorMessage());
+			assertEquals(400, e.getErrorCode());
+		}
+	}
 	
 	@Test
-	public void TestGetBlockByNumber() throws JSONException, XooaApiException {
+	public void TestGetCurrentBlockAsync_Exception() throws JSONException, XooaApiException {
+		
+		try {
+			NullPointerException response = new NullPointerException();
+		    
+		    WebService webService = mock(WebService.class);
+		    
+		    when(webService.makeBlockchainCall("https://api.xooa.com/api/v1/block/current/?async=true", "GET")).thenThrow(response);
+		    
+		    XooaClient xooaClient = new XooaClient();
+		    xooaClient.setWebService(webService);
+		    
+		    xooaClient.getCurrentBlockAsync();
+		    
+		} catch (XooaApiException e) {
+			
+			assertNotNull(e);
+		}
+	}
+	
+	@Test
+	public void TestGetBlockByNumber() throws JSONException, XooaApiException, XooaRequestTimeoutException {
+		
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("previous_hash", "7de96d8c-182f-4de3-83f8-955eaaa88f1a");
+	    jsonObject.put("data_hash", "7de96d8c-182f-4de3-83f8-955eaaa88f1a-vsjbdbcas-ddsafz");
+	    jsonObject.put("blockNumber", 20);
+	    jsonObject.put("numberOfTransactions", "4");
+	        
+	    WebCalloutResponse response = new WebCalloutResponse();
+	    response.setResponseText(jsonObject.toString());
+	    response.setResponseCode(200);
+	        
+	    WebService webService = mock(WebService.class);
+	        
+	    when(webService.makeBlockchainCall("https://api.xooa.com/api/v1/block/20", "GET")).thenReturn(response);
+	        
+	    XooaClient xooaClient = new XooaClient();
+	    xooaClient.setWebService(webService);
+	        
+	    BlockResponse blockResponse = xooaClient.getBlockByNumber(20);
+	        
+	    assertEquals(jsonObject.getString("previous_hash"), blockResponse.getPreviousHash());
+	    assertEquals(jsonObject.getString("data_hash"), blockResponse.getDataHash());
+	    assertEquals(jsonObject.getLong("blockNumber"), blockResponse.getBlockNumber());
+	    assertEquals(jsonObject.getInt("numberOfTransactions"), blockResponse.getNumberOfTransactions());
+	}
+	
+	@Test
+	public void TestGetBlockByNumber_RequestTimeout() throws JSONException, XooaApiException {
 		
 		try {
 			
 			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("previous_hash", "7de96d8c-182f-4de3-83f8-955eaaa88f1a");
-	        jsonObject.put("data_hash", "7de96d8c-182f-4de3-83f8-955eaaa88f1a-vsjbdbcas-ddsafz");
-	        jsonObject.put("blockNumber", 20);
-	        jsonObject.put("numberOfTransactions", "4");
+			jsonObject.put("resultURL", "7de96d8c-182f-4de3-83f8-955eaaa88f1a");
+	        jsonObject.put("resultId", "7de96d8c-182f-4de3-83f8-955eaaa88f1a-vsjbdbcas-ddsafz");
 	        
 	        WebCalloutResponse response = new WebCalloutResponse();
 	        response.setResponseText(jsonObject.toString());
-	        response.setResponseCode(200);
+	        response.setResponseCode(202);
 	        
 	        WebService webService = mock(WebService.class);
 	        
@@ -123,17 +264,59 @@ public class BlockchainApiTest {
 	        XooaClient xooaClient = new XooaClient();
 	        xooaClient.setWebService(webService);
 	        
-	        BlockResponse blockResponse = xooaClient.getBlockByNumber(20);
-	        
-	        assertEquals(jsonObject.getString("previous_hash"), blockResponse.getPreviousHash());
-	        assertEquals(jsonObject.getString("data_hash"), blockResponse.getDataHash());
-	        assertEquals(jsonObject.getLong("blockNumber"), blockResponse.getBlockNumber());
-	        assertEquals(jsonObject.getInt("numberOfTransactions"), blockResponse.getNumberOfTransactions());
+	        xooaClient.getBlockByNumber(20);
 	        
 		} catch (XooaRequestTimeoutException xrte) {
 			
-			assertNotNull(xrte.getResultId());
-			assertNotNull(xrte.getResultUrl());
+			assertEquals("7de96d8c-182f-4de3-83f8-955eaaa88f1a-vsjbdbcas-ddsafz", xrte.getResultId());
+			assertEquals("7de96d8c-182f-4de3-83f8-955eaaa88f1a", xrte.getResultUrl());
+		}
+	}
+	
+	@Test
+	public void TestGetBlockByNumber_APIException() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+			
+			WebCalloutResponse response = new WebCalloutResponse();
+	        response.setResponseText("Exception");
+	        response.setResponseCode(400);
+	        
+	        WebService webService = mock(WebService.class);
+	        
+	        when(webService.makeBlockchainCall("https://api.xooa.com/api/v1/block/20", "GET")).thenReturn(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getBlockByNumber(20);
+	        
+		} catch (XooaApiException xrte) {
+			
+			assertEquals("Exception", xrte.getErrorMessage());
+			assertEquals(400, xrte.getErrorCode());
+		}
+	}
+	
+	@Test
+	public void TestGetBlockByNumber_Exception() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+			
+			NullPointerException response = new NullPointerException();
+	        
+	        WebService webService = mock(WebService.class);
+	        
+	        when(webService.makeBlockchainCall("https://api.xooa.com/api/v1/block/20", "GET")).thenThrow(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getBlockByNumber(20);
+	        
+		} catch (XooaApiException xrte) {
+			
+			assertNotNull(xrte);
 		}
 	}
 	
@@ -196,6 +379,82 @@ public class BlockchainApiTest {
 			
 			assertNotNull(xrte.getResultId());
 			assertNotNull(xrte.getResultUrl());
+		}
+	}
+	
+	@Test
+	public void TestGetTransaction_RequestTimeout() throws JSONException, XooaApiException {
+		
+		try {
+			
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("resultURL", "7ef699082c475383bfa68f15f1edbec06afb053f59cc0b0f118e72d3a6f3e7eb");
+	        jsonObject.put("resultId", "kavixooatvw2s9e27");
+	        
+	        WebCalloutResponse response = new WebCalloutResponse();
+	        response.setResponseText(jsonObject.toString());
+	        response.setResponseCode(202);
+	        
+	        WebService webService = mock(WebService.class);
+	        
+	        when(webService.makeTransactionCall("https://api.xooa.com/api/v1/transactions/7ef699082c475383bfa68f15f1edbec06afb053f59cc0b0f118e72d3a6f3e7eb", "GET")).thenReturn(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getTransaction("7ef699082c475383bfa68f15f1edbec06afb053f59cc0b0f118e72d3a6f3e7eb");
+	        
+		} catch (XooaRequestTimeoutException xrte) {
+			
+			assertEquals("kavixooatvw2s9e27", xrte.getResultId());
+			assertEquals("7ef699082c475383bfa68f15f1edbec06afb053f59cc0b0f118e72d3a6f3e7eb", xrte.getResultUrl());
+		}
+	}
+	
+	@Test
+	public void TestGetTransaction_APIException() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+			
+	        WebCalloutResponse response = new WebCalloutResponse();
+	        response.setResponseText("Exception");
+	        response.setResponseCode(402);
+	        
+	        WebService webService = mock(WebService.class);
+	        
+	        when(webService.makeTransactionCall("https://api.xooa.com/api/v1/transactions/7ef699082c475383bfa68f15f1edbec06afb053f59cc0b0f118e72d3a6f3e7eb", "GET")).thenReturn(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getTransaction("7ef699082c475383bfa68f15f1edbec06afb053f59cc0b0f118e72d3a6f3e7eb");
+	        
+		} catch (XooaApiException xrte) {
+			
+			assertEquals("Exception", xrte.getErrorMessage());
+			assertEquals(402, xrte.getErrorCode());
+		}
+	}
+	
+	@Test
+	public void TestGetTransaction_Exception() throws JSONException, XooaRequestTimeoutException {
+		
+		try {
+			
+			NullPointerException response = new NullPointerException();
+			
+	        WebService webService = mock(WebService.class);
+	        
+	        when(webService.makeTransactionCall("https://api.xooa.com/api/v1/transactions/7ef699082c475383bfa68f15f1edbec06afb053f59cc0b0f118e72d3a6f3e7eb", "GET")).thenThrow(response);
+	        
+	        XooaClient xooaClient = new XooaClient();
+	        xooaClient.setWebService(webService);
+	        
+	        xooaClient.getTransaction("7ef699082c475383bfa68f15f1edbec06afb053f59cc0b0f118e72d3a6f3e7eb");
+	        
+		} catch (XooaApiException xrte) {
+			
+			assertNotNull(xrte);
 		}
 	}
 	

@@ -260,10 +260,12 @@ public class XooaSample {
 			
 		} catch (XooaApiException xae) {
 			
+			System.out.println("----- Exception -----");
 			xae.display();
 			
 		} catch(XooaRequestTimeoutException xrte) {
 			
+			System.out.println("----- Exception -----");
 			xrte.display();
 		}
 	}

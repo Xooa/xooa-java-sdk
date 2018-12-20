@@ -274,8 +274,7 @@ public class IdentityApi {
 
 					for (int i = 0; i < identitiesArray.length(); i++) {
 
-						// For each identity, we parse the respective object to get the inner JsonArray
-						// for attributes
+						// For each identity, we parse the respective object to get the inner JsonArray for attributes
 						JSONObject identity = identitiesArray.optJSONObject(i);
 
 						JSONArray attribuesArray = identity.optJSONArray("Attrs");
@@ -305,8 +304,6 @@ public class IdentityApi {
 
 					logger.error(e);
 
-					// NOTE: This error is not thrown to the user of the lib since this is supposed
-					// to be handled here and not by the user
 					XooaApiException apiException = new XooaApiException();
 					apiException.setErrorCode(0);
 					apiException.setErrorMessage(e.getMessage());

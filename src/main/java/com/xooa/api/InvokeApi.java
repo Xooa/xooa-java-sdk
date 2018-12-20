@@ -102,8 +102,7 @@ public class InvokeApi {
 	 * @throws XooaApiException            It is thrown in case of any internal error or if the API returns any error.
 	 * @throws XooaRequestTimeoutException It is thrown when a synchronous call to API returns a pending response due to timeout.
 	 */
-	private InvokeResponse callInvokeApi(WebService webService, String url, String[] args)
-			throws XooaApiException, XooaRequestTimeoutException {
+	private InvokeResponse callInvokeApi(WebService webService, String url, String[] args) throws XooaApiException, XooaRequestTimeoutException {
 
 		try {
 
@@ -172,7 +171,7 @@ public class InvokeApi {
 				throw apiException;
 			}
 		} catch (XooaApiException xae) {
-			xae.printStackTrace();
+			
 			throw xae;
 
 		} catch (Exception e) {
