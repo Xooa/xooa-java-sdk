@@ -968,7 +968,7 @@ public class ResultApiTest {
 	}
 	
 	@Test
-	public void testGetResultForDeleteIdentity_ParseException() throws JSONException, XooaApiException {
+	public void testGetResultForDeleteIdentity_ParseException() throws JSONException, XooaApiException, XooaRequestTimeoutException {
 		
 		try {
 			JSONObject object = new JSONObject();
@@ -988,7 +988,7 @@ public class ResultApiTest {
 	        
 	        xooaClient.getResultForIdentityDelete("0af1fa06-5639-440a-987f-f7ac2587c185");
 	        
-		} catch (XooaRequestTimeoutException xrte) {
+		} catch (XooaApiException xrte) {
 			
 			assertNotNull(xrte);
 		}
