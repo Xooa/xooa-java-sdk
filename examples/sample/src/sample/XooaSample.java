@@ -194,7 +194,7 @@ public class XooaSample {
 			
 			System.out.println("----- Invoke Arguments -----");
 			
-			String[] invokeArguments = {"args1", "x100", "args2", "x200"};
+			String[] invokeArguments = {"args1", "args2"};
 			InvokeResponse invokeResponse = xooaClient.invoke("set", invokeArguments);
 			invokeResponse.display();
 			
