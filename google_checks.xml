@@ -53,6 +53,12 @@
     <!-- Locale to use to generate messages -->
     <property name="localeCountry" value="DE"/>
 
+	
+	
+    <module name="StrictDuplicateCode">
+      <property name="min" value="15"/>
+    </module>
+
     <!-- Checks that a package.html file exists for each package.     -->
     <!-- See http://checkstyle.sf.net/config_javadoc.html#PackageHtml -->
     <!-- <module name="PackageHtml"/> -->
