@@ -1,6 +1,3 @@
-[![Build Status](http://3.84.45.239:8080/buildStatus/icon?job=xooa-java-sdk)](http://3.84.45.239:8080/job/xooa-java-sdk)
-
-
 # Xooa Java SDK
 
 The official Xooa SDK for Java to connect with the Xooa Blockchain PaaS.
